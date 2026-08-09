@@ -17,13 +17,6 @@
 
 Turns a source (one of your own guides, any RSS feed/URL, or a bare topic prompt) into a finished vertical short: narrated, captioned, built from real code/commands and legible text cards over the guide's own real screenshots (panned, full-bleed) or another genuinely animated background — never AI-generated imagery.
 
-## 🎬 Samples
-
-Two sample videos are included in `samples/` — both rendered end-to-end from real techygeekshome.info guides, so you can see exactly what the pipeline produces before running it yourself:
-
-- [`sample-1-code-task-scheduler-sort-visualizer.mp4`](samples/sample-1-code-task-scheduler-sort-visualizer.mp4) — the Sort Visualizer procedural background
-- [`sample-2-diskgeek-article-images.mp4`](samples/sample-2-diskgeek-article-images.mp4) — the default Article Images background (the guide's own real screenshots, panned)
-
 ## ⬇️ Quick start
 
 **Windows**
@@ -113,6 +106,6 @@ Shorts Studio is free to download and use. This is proprietary freeware, not ope
 
 Made with ❤️ by [**TechyGeeksHome**](https://techygeekshome.info)
 
-[Website](https://techygeekshome.info) · [YouTube](https://www.youtube.com/channel/UCtEuFj1SMLiuRoucD1hv8dA) · [X](https://x.com/TechyGeeks1) · [Facebook](https://www.facebook.com/techygeeks.home) · [Instagram](https://www.instagram.com/techygeekshome/)
+[Website](https://techygeekshome.info) · [YouTube](https://www.youtube.com/channel/UCtEuFj1SMLiuRoucD1hv8dA) · [X](https://x.com/TechyGeeks1) · [Facebook](https://www.facebook.com/techygeeks.home) · [Instagram](https://www.instagram.com/andrewarmstrongtgh/)
 
 </div>
