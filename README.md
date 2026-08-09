@@ -17,8 +17,6 @@
 
 Turns a source (one of your own guides, any RSS feed/URL, or a bare topic prompt) into a finished vertical short: narrated, captioned, built from real code/commands and legible text cards over the guide's own real screenshots (panned, full-bleed) or another genuinely animated background — never AI-generated imagery.
 
-This replaces the old Reddit Video Maker Bot. It keeps the one thing that tool got right (compositing images onto a background with ffmpeg) and drops everything that made it fragile or off-brief: the Reddit login/scraping, the hardcoded selectors, the missing captions, and the reddit-only content model.
-
 ## 🎬 Samples
 
 Two sample videos are included in `samples/` — both rendered end-to-end from real techygeekshome.info guides, so you can see exactly what the pipeline produces before running it yourself:
