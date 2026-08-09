@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-proprietary%20freeware-b7791f)](LICENSE)
 [![Made by TechyGeeksHome](https://img.shields.io/badge/made%20by-TechyGeeksHome-b191f2)](https://techygeekshome.info)
 
-[Quick start](#%EF%B8%8F-quick-start) · [Samples](#-samples) · [How it works](#-how-it-works) · [Settings](#settings) · [License](#-license)
+[Quick start](#%EF%B8%8F-quick-start) · [How it works](#-how-it-works) · [Settings](#settings) · [License](#-license)
 
 </div>
 
