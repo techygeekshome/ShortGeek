@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/techygeekshome/Shorts-Studio/main/Branding/shorts-studio-logo.png" alt="Shorts Studio logo" width="96" height="96">
+
 # Shorts Studio
 
 **Turns a source — one of your own guides, any RSS feed/URL, or a bare topic prompt — into a finished vertical short: narrated, captioned, and built from real code/commands and legible text cards.**
