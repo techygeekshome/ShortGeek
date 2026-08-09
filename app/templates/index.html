@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TGH Shorts Studio</title>
+<link rel="stylesheet" href="/static/app.css?v={{ app_version }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" id="brandMark">TGH</div>
+      <div><div class="brand-name" id="brandName">Shorts Studio</div><div class="brand-sub" id="brandSub">techygeekshome.info</div></div>
+    </div>
+    <div class="nav-item active" data-view="new">➕ New Short</div>
+    <div class="nav-item" data-view="library">🎞️ Library</div>
+    <div class="nav-item" data-view="backgrounds">🎬 Backgrounds</div>
+    <div class="nav-divider"></div>
+    <div class="nav-label">Config</div>
+    <div class="nav-item" data-view="settings">⚙️ Settings</div>
+    <div class="nav-item" data-view="about">ℹ️ About</div>
+  </aside>
+
+  <main class="content">
+
+    <!-- ============ NEW SHORT VIEW ============ -->
+    <section id="view-new" class="view active">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+        <div>
+          <div class="screen-title">Create a new short</div>
+          <div class="screen-sub">Pick a source, review the script, choose a voice &amp; look, then render.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span id="clearedPill" class="pill" style="display:none;background:#e6f6ea;color:#1a7a3a;">Cleared ✓</span>
+          <button class="btn-ghost" id="clearFormBtn" title="Clear the script draft and source fields so you can start the next one">🧹 Clear</button>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="left-col">
+
+          <div class="step">
+            <div class="step-head"><div class="step-num">1</div><div class="step-title">Pick a source</div></div>
+            <div class="tabs" id="sourceTabs">
+              <div class="tab active" data-src="guide">My Guides</div>
+              <div class="tab" data-src="rss_url">Website / RSS</div>
+              <div class="tab" data-src="topic">Topic Prompt</div>
+              <div class="tab" data-src="paste">Paste Script</div>
+            </div>
+
+            <div class="src-pane" data-pane="guide">
+              <div class="search-row">
+                <input id="guideSearch" class="text-input" placeholder="🔎 Search your guides…" />
+              </div>
+              <div id="guideList" class="guide-list"><div class="hint">Loading guides…</div></div>
+            </div>
+
+            <div class="src-pane hidden" data-pane="rss_url">
+              <input id="rssUrl" class="text-input" placeholder="Paste an RSS feed URL, or any article/page URL…" />
+              <button class="btn-ghost" id="rssFetchBtn" style="margin-top:8px;">Fetch</button>
+              <div id="rssList" class="guide-list" style="margin-top:10px;"></div>
+            </div>
+
+            <div class="src-pane hidden" data-pane="topic">
+              <textarea id="topicInput" class="text-input" rows="2" placeholder="e.g. 3 Windows settings everyone should turn off"></textarea>
+            </div>
+
+            <div class="src-pane hidden" data-pane="paste">
+              <textarea id="pasteInput" class="text-input" rows="5" placeholder="Paste a finished script — first line becomes the hook."></textarea>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><div class="step-num">2</div><div class="step-title">Script</div></div>
+            <div id="scriptEmpty" class="hint">Pick a source above, then click "Draft script".</div>
+            <div id="scriptEditor" class="hidden">
+              <label class="field-label">Hook</label>
+              <textarea id="hookField" class="text-input" rows="2"></textarea>
+              <label class="field-label">Beats</label>
+              <div id="beatsList"></div>
+              <label class="field-label">Call to action</label>
+              <textarea id="ctaField" class="text-input" rows="1"></textarea>
+              <div class="script-meta">
+                <span class="pill" id="durationPill">≈ -- sec</span>
+                <span class="pill" id="llmPill" style="display:none;">AI-polished</span>
+              </div>
+            </div>
+            <button class="btn-ghost" id="draftBtn" style="margin-top:12px;">✏️ Draft script</button>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><div class="step-num">3</div><div class="step-title">Voice &amp; look</div></div>
+
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">VOICE</div>
+            <select id="voiceEngine" class="text-input" style="margin-bottom:14px;">
+              <option value="edge">Edge Neural — free, online, best default</option>
+              <option value="espeak">Offline (eSpeak) — no internet needed</option>
+              <option value="elevenlabs">ElevenLabs — needs your API key in Settings</option>
+            </select>
+
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">CAPTION STYLE</div>
+            <div class="tabs" id="capTabs" style="margin-bottom:14px;">
+              <div class="cap-swatch selected" data-val="bold_highlight">Bold Highlight</div>
+              <div class="cap-swatch" data-val="minimal">Minimal</div>
+              <div class="cap-swatch" data-val="classic_subtitle">Classic Subtitle</div>
+            </div>
+
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">BACKGROUND</div>
+            <div class="swatch-row" id="bgSwatches">
+              <div class="swatch selected" data-val="content_pan"><div class="swatch-thumb t8">📷</div><div class="swatch-label">Article Images</div></div>
+              <div class="swatch" data-val="gradient_motion"><div class="swatch-thumb t2"></div><div class="swatch-label">Gradient Motion</div></div>
+              <div class="swatch" data-val="typing_loop"><div class="swatch-thumb t1"></div><div class="swatch-label">Typing Loop</div></div>
+              <div class="swatch" data-val="terminal_scroll"><div class="swatch-thumb t3"></div><div class="swatch-label">Terminal Scroll</div></div>
+              <div class="swatch" data-val="clean_light"><div class="swatch-thumb t4"></div><div class="swatch-label">Clean Light</div></div>
+              <div class="swatch" data-val="code_rain"><div class="swatch-thumb t5"></div><div class="swatch-label">Code Rain</div></div>
+              <div class="swatch" data-val="bounce_orbit"><div class="swatch-thumb t6"></div><div class="swatch-label">Bounce Orbit</div></div>
+              <div class="swatch" data-val="sort_visualizer"><div class="swatch-thumb t7"></div><div class="swatch-label">Sort Visualizer</div></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 8px;">YOUR CLIPS (optional)</div>
+            <div class="swatch-row" id="customBgSwatches">
+              <div class="hint">Loading…</div>
+            </div>
+            <div class="fn-note">"Article Images" pans slowly across the guide's own real screenshots behind each card (falling back to a generated look wherever a beat has no image). Other built-in backgrounds are generated in code, live, frame by frame — or drop your own real video clips into <code>assets/backgrounds/custom/</code> to use those instead. Never AI art, never someone else's footage passed off as yours.</div>
+          </div>
+
+          <button class="generate-btn" id="generateBtn" disabled>⚡ Generate Short</button>
+          <div id="genError" class="error-note hidden"></div>
+        </div>
+
+        <div class="right-col">
+          <div class="queue-panel">
+            <div class="queue-title">Render queue <span class="count" id="queueCount">0</span></div>
+            <div id="queueList"><div class="hint">Nothing queued yet.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIBRARY VIEW ============ -->
+    <section id="view-library" class="view">
+      <div class="screen-title">Library</div>
+      <div class="screen-sub">Everything you've rendered, newest first.</div>
+      <div id="libraryGrid" class="library-grid"><div class="hint">Nothing rendered yet.</div></div>
+    </section>
+
+    <!-- ============ BACKGROUNDS VIEW ============ -->
+    <section id="view-backgrounds" class="view">
+      <div class="screen-title">Backgrounds</div>
+      <div class="screen-sub">Manage the video clips available under "Your Clips" in New Short → Voice &amp; look.</div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">Add a clip</div></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-ghost" id="openClipsFolderBtn">📂 Open clips folder</button>
+          <label class="btn-ghost" style="cursor:pointer;">
+            ⬆️ Upload a clip
+            <input type="file" id="clipUploadInput" accept="video/mp4,.mp4" style="display:none;">
+          </label>
+        </div>
+        <div id="uploadStatus" class="hint" style="margin-top:8px;"></div>
+        <div class="fn-note">Drop .mp4 loops here — gameplay footage, satisfying clips, whatever keeps attention. Uploaded/added clips show up back in New Short right away. Large files may take a moment.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">Your clips</div></div>
+        <div id="clipsManageGrid" class="library-grid"><div class="hint">Loading…</div></div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT VIEW ============ -->
+    <section id="view-about" class="view">
+      <div class="screen-title">About</div>
+      <div class="screen-sub" id="aboutVersion">Version …</div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">TGH Shorts Studio</div></div>
+        <p style="font-size:13px;line-height:1.55;color:var(--text);margin:0 0 8px;">
+          A local, no-login tool that turns your guides (or any RSS/URL/topic) into a
+          narrated, captioned short-form video — built from real code/screenshots and
+          generated visuals, never AI-generated imagery. Runs entirely on this computer;
+          nothing is sent anywhere except a service you've explicitly given a key for.
+        </p>
+        <p style="font-size:11.5px;color:var(--muted-2);margin:0;">
+          This is a custom build made for you, not a published app with a live
+          updater — there's nothing to "check for updates" against. New versions
+          arrive as a new zip; extract it over this folder to update (your
+          data/config.json and Library are kept, since they live outside app/).
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">What's changed</div></div>
+        <div id="changelogList"><div class="hint">Loading…</div></div>
+      </div>
+    </section>
+
+    <!-- ============ SETTINGS VIEW ============ -->
+    <section id="view-settings" class="view">
+      <div class="screen-title">Settings</div>
+      <div class="screen-sub">Stored locally in data/config.json — nothing here is uploaded anywhere.</div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">Brand</div></div>
+        <label class="field-label">Site URL (used for the "My Guides" source)</label>
+        <input id="set_site_url" class="text-input" />
+        <label class="field-label">Brand handle (shown in the watermark &amp; CTA line)</label>
+        <input id="set_brand_handle" class="text-input" />
+        <label class="field-label">Logo letters (watermark badge)</label>
+        <input id="set_logo_letters" class="text-input" style="max-width:120px;" />
+      </div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">Voices</div></div>
+        <label class="field-label">Edge voice</label>
+        <input id="set_edge_voice" class="text-input" placeholder="e.g. en-GB-RyanNeural" />
+        <label class="field-label">ElevenLabs API key (optional)</label>
+        <input id="set_elevenlabs_api_key" class="text-input" type="password" />
+        <label class="field-label">ElevenLabs voice ID (optional)</label>
+        <input id="set_elevenlabs_voice_id" class="text-input" />
+      </div>
+
+      <div class="step">
+        <div class="step-head"><div class="step-title">Script AI polish (optional)</div></div>
+        <label class="field-label">Provider</label>
+        <select id="set_llm_provider" class="text-input">
+          <option value="none">None — heuristic script only (no key needed)</option>
+          <option value="anthropic">Anthropic (Claude)</option>
+          <option value="openai">OpenAI</option>
+        </select>
+        <label class="field-label">API key</label>
+        <input id="set_llm_api_key" class="text-input" type="password" />
+        <label class="field-label">Brand style notes</label>
+        <textarea id="set_brand_style_notes" class="text-input" rows="2"></textarea>
+      </div>
+
+      <button class="btn-ghost" id="saveSettingsBtn">💾 Save settings</button>
+      <span id="settingsSaved" class="pill" style="display:none;margin-left:10px;">Saved ✓</span>
+    </section>
+
+  </main>
+</div>
+<script src="/static/app.js?v={{ app_version }}"></script>
+</body>
+</html>

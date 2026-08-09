@@ -1,0 +1,64 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Cap,Roboto Black,58,&H00FFFFFF,&H000000FF,&H00161616,&H00000000,1,0,0,0,100,100,0,0,1,4,2,2,70,70,430,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.10,0:00:00.60,Cap,,0,0,0,,{\c&H00D4FF&}Windows{\c&HFFFFFF&} can clean up
+Dialogue: 0,0:00:00.61,0:00:00.78,Cap,,0,0,0,,Windows {\c&H00D4FF&}can{\c&HFFFFFF&} clean up
+Dialogue: 0,0:00:00.79,0:00:01.07,Cap,,0,0,0,,Windows can {\c&H00D4FF&}clean{\c&HFFFFFF&} up
+Dialogue: 0,0:00:01.09,0:00:01.22,Cap,,0,0,0,,Windows can clean {\c&H00D4FF&}up{\c&HFFFFFF&}
+Dialogue: 0,0:00:01.24,0:00:01.62,Cap,,0,0,0,,{\c&H00D4FF&}wasted{\c&HFFFFFF&} disk space on
+Dialogue: 0,0:00:01.64,0:00:01.89,Cap,,0,0,0,,wasted {\c&H00D4FF&}disk{\c&HFFFFFF&} space on
+Dialogue: 0,0:00:01.90,0:00:02.26,Cap,,0,0,0,,wasted disk {\c&H00D4FF&}space{\c&HFFFFFF&} on
+Dialogue: 0,0:00:02.27,0:00:02.38,Cap,,0,0,0,,wasted disk space {\c&H00D4FF&}on{\c&HFFFFFF&}
+Dialogue: 0,0:00:02.39,0:00:02.51,Cap,,0,0,0,,{\c&H00D4FF&}its{\c&HFFFFFF&} own Open Settings
+Dialogue: 0,0:00:02.52,0:00:02.91,Cap,,0,0,0,,its {\c&H00D4FF&}own{\c&HFFFFFF&} Open Settings
+Dialogue: 0,0:00:03.77,0:00:04.11,Cap,,0,0,0,,its own {\c&H00D4FF&}Open{\c&HFFFFFF&} Settings
+Dialogue: 0,0:00:04.12,0:00:04.70,Cap,,0,0,0,,its own Open {\c&H00D4FF&}Settings{\c&HFFFFFF&}
+Dialogue: 0,0:00:04.88,0:00:05.04,Cap,,0,0,0,,{\c&H00D4FF&}then{\c&HFFFFFF&} System then Storage
+Dialogue: 0,0:00:05.05,0:00:05.52,Cap,,0,0,0,,then {\c&H00D4FF&}System{\c&HFFFFFF&} then Storage
+Dialogue: 0,0:00:05.74,0:00:05.91,Cap,,0,0,0,,then System {\c&H00D4FF&}then{\c&HFFFFFF&} Storage
+Dialogue: 0,0:00:05.92,0:00:06.45,Cap,,0,0,0,,then System then {\c&H00D4FF&}Storage{\c&HFFFFFF&}
+Dialogue: 0,0:00:06.69,0:00:06.78,Cap,,0,0,0,,{\c&H00D4FF&}and{\c&HFFFFFF&} turn on Storage
+Dialogue: 0,0:00:06.79,0:00:07.09,Cap,,0,0,0,,and {\c&H00D4FF&}turn{\c&HFFFFFF&} on Storage
+Dialogue: 0,0:00:07.10,0:00:07.24,Cap,,0,0,0,,and turn {\c&H00D4FF&}on{\c&HFFFFFF&} Storage
+Dialogue: 0,0:00:07.25,0:00:07.70,Cap,,0,0,0,,and turn on {\c&H00D4FF&}Storage{\c&HFFFFFF&}
+Dialogue: 0,0:00:07.71,0:00:08.20,Cap,,0,0,0,,{\c&H00D4FF&}Sense{\c&HFFFFFF&} It clears your
+Dialogue: 0,0:00:09.06,0:00:09.25,Cap,,0,0,0,,Sense {\c&H00D4FF&}It{\c&HFFFFFF&} clears your
+Dialogue: 0,0:00:09.26,0:00:09.54,Cap,,0,0,0,,Sense It {\c&H00D4FF&}clears{\c&HFFFFFF&} your
+Dialogue: 0,0:00:09.55,0:00:09.68,Cap,,0,0,0,,Sense It clears {\c&H00D4FF&}your{\c&HFFFFFF&}
+Dialogue: 0,0:00:09.69,0:00:10.32,Cap,,0,0,0,,{\c&H00D4FF&}recycle{\c&HFFFFFF&} bin and temporary
+Dialogue: 0,0:00:10.34,0:00:10.54,Cap,,0,0,0,,recycle {\c&H00D4FF&}bin{\c&HFFFFFF&} and temporary
+Dialogue: 0,0:00:10.55,0:00:10.71,Cap,,0,0,0,,recycle bin {\c&H00D4FF&}and{\c&HFFFFFF&} temporary
+Dialogue: 0,0:00:10.72,0:00:11.12,Cap,,0,0,0,,recycle bin and {\c&H00D4FF&}temporary{\c&HFFFFFF&}
+Dialogue: 0,0:00:11.14,0:00:11.60,Cap,,0,0,0,,{\c&H00D4FF&}files{\c&HFFFFFF&} on a schedule
+Dialogue: 0,0:00:11.61,0:00:11.71,Cap,,0,0,0,,files {\c&H00D4FF&}on{\c&HFFFFFF&} a schedule
+Dialogue: 0,0:00:11.72,0:00:11.76,Cap,,0,0,0,,files on {\c&H00D4FF&}a{\c&HFFFFFF&} schedule
+Dialogue: 0,0:00:11.78,0:00:12.19,Cap,,0,0,0,,files on a {\c&H00D4FF&}schedule{\c&HFFFFFF&}
+Dialogue: 0,0:00:12.20,0:00:12.34,Cap,,0,0,0,,{\c&H00D4FF&}you{\c&HFFFFFF&} choose No need
+Dialogue: 0,0:00:12.35,0:00:12.91,Cap,,0,0,0,,you {\c&H00D4FF&}choose{\c&HFFFFFF&} No need
+Dialogue: 0,0:00:13.78,0:00:14.04,Cap,,0,0,0,,you choose {\c&H00D4FF&}No{\c&HFFFFFF&} need
+Dialogue: 0,0:00:14.05,0:00:14.23,Cap,,0,0,0,,you choose No {\c&H00D4FF&}need{\c&HFFFFFF&}
+Dialogue: 0,0:00:14.24,0:00:14.30,Cap,,0,0,0,,{\c&H00D4FF&}to{\c&HFFFFFF&} remember to run
+Dialogue: 0,0:00:14.31,0:00:14.71,Cap,,0,0,0,,to {\c&H00D4FF&}remember{\c&HFFFFFF&} to run
+Dialogue: 0,0:00:14.72,0:00:14.84,Cap,,0,0,0,,to remember {\c&H00D4FF&}to{\c&HFFFFFF&} run
+Dialogue: 0,0:00:14.85,0:00:15.09,Cap,,0,0,0,,to remember to {\c&H00D4FF&}run{\c&HFFFFFF&}
+Dialogue: 0,0:00:15.10,0:00:15.38,Cap,,0,0,0,,{\c&H00D4FF&}Disk{\c&HFFFFFF&} Cleanup yourself ever
+Dialogue: 0,0:00:15.39,0:00:15.79,Cap,,0,0,0,,Disk {\c&H00D4FF&}Cleanup{\c&HFFFFFF&} yourself ever
+Dialogue: 0,0:00:15.80,0:00:16.19,Cap,,0,0,0,,Disk Cleanup {\c&H00D4FF&}yourself{\c&HFFFFFF&} ever
+Dialogue: 0,0:00:16.20,0:00:16.38,Cap,,0,0,0,,Disk Cleanup yourself {\c&H00D4FF&}ever{\c&HFFFFFF&}
+Dialogue: 0,0:00:16.39,0:00:16.85,Cap,,0,0,0,,{\c&H00D4FF&}again{\c&HFFFFFF&} Follow for more
+Dialogue: 0,0:00:17.71,0:00:18.07,Cap,,0,0,0,,again {\c&H00D4FF&}Follow{\c&HFFFFFF&} for more
+Dialogue: 0,0:00:18.09,0:00:18.21,Cap,,0,0,0,,again Follow {\c&H00D4FF&}for{\c&HFFFFFF&} more
+Dialogue: 0,0:00:18.23,0:00:18.44,Cap,,0,0,0,,again Follow for {\c&H00D4FF&}more{\c&HFFFFFF&}
+Dialogue: 0,0:00:18.45,0:00:18.88,Cap,,0,0,0,,{\c&H00D4FF&}IT{\c&HFFFFFF&} tips
+Dialogue: 0,0:00:18.89,0:00:19.40,Cap,,0,0,0,,IT {\c&H00D4FF&}tips{\c&HFFFFFF&}
