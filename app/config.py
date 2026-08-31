@@ -1,5 +1,5 @@
 """
-Local settings storage for TGH Shorts Studio.
+Local settings storage for ShortGeek.
 
 Everything lives in a single JSON file on disk (data/config.json). Nothing here
 is ever sent anywhere except to the services you explicitly configure a key
@@ -12,20 +12,46 @@ import threading
 from pathlib import Path
 from typing import Any, Dict
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
+import os
+import sys
+
+_FROZEN = getattr(sys, "frozen", False)
+
+if _FROZEN:
+    # PyInstaller unpacks the read-only payload (app/, assets/) into _internal.
+    BASE_DIR = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+    # Anything the app writes has to live somewhere the user can actually write
+    # to. The install folder may be read-only, so settings, the render library
+    # and the cache go under LOCALAPPDATA instead, and survive an uninstall.
+    _root = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
+    DATA_DIR = Path(_root) / "ShortGeek"
+else:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    DATA_DIR = BASE_DIR / "data"
+
 CONFIG_PATH = DATA_DIR / "config.json"
 LIBRARY_DIR = DATA_DIR / "library"
 CACHE_DIR = DATA_DIR / "cache"
+
+# Assets ship with the app and are only ever read.
 ASSETS_DIR = BASE_DIR / "assets"
 FONTS_DIR = ASSETS_DIR / "fonts"
-MUSIC_DIR = ASSETS_DIR / "backgrounds" / "music"
+
+# Your own background clips and music are user content, so they live beside the
+# rest of the user's data rather than inside the install folder.
+CUSTOM_BG_DIR = (DATA_DIR / "backgrounds" / "custom") if _FROZEN else (ASSETS_DIR / "backgrounds" / "custom")
+MUSIC_DIR = (DATA_DIR / "backgrounds" / "music") if _FROZEN else (ASSETS_DIR / "backgrounds" / "music")
 
 DEFAULTS: Dict[str, Any] = {
-    "brand_name": "TechyGeeksHome",
-    "brand_handle": "techygeekshome.info",
-    "site_url": "https://techygeekshome.info",
-    "logo_letters": "TGH",
+    # Deliberately generic. ShortGeek stamps a name and handle onto the end card of
+    # every video, so shipping a real person's brand here would mean strangers
+    # publishing shorts under someone else's name. The app asks on first run and
+    # sets brand_configured once the question has been answered.
+    "brand_configured": False,
+    "brand_name": "My Channel",
+    "brand_handle": "",
+    "site_url": "",
+    "logo_letters": "MC",
     # Voice
     "voice_engine": "edge",          # "edge" | "espeak" | "elevenlabs"
     "edge_voice": "en-GB-RyanNeural",
@@ -60,6 +86,7 @@ class Config:
         LIBRARY_DIR.mkdir(parents=True, exist_ok=True)
         CACHE_DIR.mkdir(parents=True, exist_ok=True)
         MUSIC_DIR.mkdir(parents=True, exist_ok=True)
+        CUSTOM_BG_DIR.mkdir(parents=True, exist_ok=True)
         if CONFIG_PATH.exists():
             try:
                 with open(CONFIG_PATH, "r", encoding="utf-8") as f:

@@ -22,11 +22,11 @@ from .scripting.writer import Beat, Script
 from .sources import rss_url, topic
 from .sources.wordpress import WordPressSource
 from .tts import router as tts_router
-from .version import APP_VERSION, CHANGELOG
+from .version import APP_LICENCE, APP_VERSION, CHANGELOG
 from .video import assemble
 from .visuals import backgrounds
 
-app = FastAPI(title="TGH Shorts Studio")
+app = FastAPI(title="ShortGeek")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "app" / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "app" / "templates"))
 
@@ -46,11 +46,21 @@ def index(request: Request):
 @app.get("/api/guides")
 def api_guides(search: str = "", per_page: int = 20):
     cfg = config.all()
-    src = WordPressSource(cfg["site_url"])
+    site = (cfg.get("site_url") or "").strip()
+    # My Guides reads a WordPress site's public REST API. Until the user has told
+    # us which site is theirs there is nothing to read, so say that plainly rather
+    # than building a broken URL and reporting a connection error for it.
+    if not site:
+        return {
+            "items": [],
+            "notice": "Set your site address under Settings to pull in your own guides. "
+                      "The other three source tabs work without it.",
+        }
+    src = WordPressSource(site)
     try:
         return {"items": src.search(search, per_page)}
     except Exception as e:
-        raise HTTPException(502, f"Couldn't reach {cfg['site_url']}: {e}")
+        raise HTTPException(502, f"Couldn't reach {site}: {e}")
 
 
 class RssListIn(BaseModel):
@@ -287,7 +297,7 @@ def api_backgrounds_custom_delete(filename: str):
 
 @app.get("/api/about")
 def api_about():
-    return {"version": APP_VERSION, "changelog": CHANGELOG}
+    return {"version": APP_VERSION, "changelog": CHANGELOG, "licence": APP_LICENCE}
 
 
 # ----------------------------------------------------------------- settings -

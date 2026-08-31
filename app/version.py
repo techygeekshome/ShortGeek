@@ -1,13 +1,31 @@
-"""Version/changelog shown in the About page. This is a custom one-off
-build, not a published app with a live update feed -- there's nothing to
-"check for updates" against. Bump APP_VERSION and add a CHANGELOG entry
-whenever a new build ships, so the About page tells you what changed."""
+"""Version and changelog shown on the About page.
 
-APP_VERSION = "1.12.0"
+APP_VERSION is compared against the newest GitHub release when the user presses
+Check for updates, so it must match the release tag. The GitHub Actions workflow
+fails the build if it does not.
+
+The app was called Shorts Studio up to 1.12.0 and was never released publicly.
+Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
+older entries are kept below because the fixes in them are real."""
+
+APP_VERSION = "1.0.0"
+
+# Shown on the About page. Kept here so there is one place to change it if the
+# licence ever changes.
+APP_LICENCE = "Freeware"
 
 CHANGELOG = [
     {
-        "version": "1.12.0",
+        "version": "1.0.0",
+        "notes": [
+            "First public release, as ShortGeek. Same app, new name, and it now looks like the rest of the TechyGeeksHome range.",
+            "Added a first-run setup that asks for your own name, handle and logo letters. Previously the app shipped with TechyGeeksHome's branding baked into the defaults, which meant anyone who installed it produced videos branded as somebody else.",
+            "Added Check for updates and a Support panel to the sidebar, and rebuilt the About page to state plainly what the app will not do.",
+            "Packaged as a Windows installer with Python and ffmpeg bundled. There is nothing to install first: no Python, no PATH ticking, no winget commands.",
+        ],
+    },
+    {
+        "version": "1.12.0 (pre-release, as Shorts Studio)",
         "notes": [
             "Added an explicit \"🧹 Clear\" button at the top of New Short, so you can queue up several videos back to back without waiting for each one to finish rendering or closing/reopening the app in between -- draft, hit Generate, hit Clear, draft the next one. Shows a quick \"Cleared ✓\" confirmation so it's obvious it worked. The queue panel itself is untouched by it, so everything you've got rendering or finished stays visible.",
         ],
@@ -90,7 +108,7 @@ CHANGELOG = [
         ],
     },
     {
-        "version": "1.0.0",
+        "version": "1.0.0 (pre-release, as Shorts Studio)",
         "notes": ["Initial build."],
     },
 ]
