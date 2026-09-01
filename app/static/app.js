@@ -314,7 +314,7 @@ async function loadCustomBackgrounds() {
     const wrap = $("#customBgSwatches");
     if (!data.items.length) {
       wrap.innerHTML =
-        '<div class="hint" style="margin-top:2px;">No clips yet — add one from the 🎬 Backgrounds page in the sidebar (open the folder or upload directly).</div>';
+        '<div class="hint" style="margin-top:2px;">No clips yet - add one from the 🎬 Backgrounds page in the sidebar (open the folder or upload directly).</div>';
       return;
     }
     let html = "";
@@ -343,7 +343,7 @@ async function loadClipsManage() {
   try {
     const data = await jsonFetch("/api/backgrounds/custom");
     if (!data.items.length) {
-      grid.innerHTML = '<div class="hint">No clips yet — open the folder or upload one above.</div>';
+      grid.innerHTML = '<div class="hint">No clips yet - open the folder or upload one above.</div>';
       return;
     }
     grid.innerHTML = "";
