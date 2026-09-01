@@ -164,7 +164,7 @@ def api_render(body: RenderRequest):
         tts_result = tts_router.synthesize(script.full_text, cfg, narration_path, segments=segments)
         job.progress = 0.12
         if tts_result.fallback_used:
-            job.message = "Online voice unavailable — used the offline fallback voice."
+            job.message = "Online voice unavailable - used the offline fallback voice."
 
         job.message = "Rendering video…"
         out_path = str(LIBRARY_DIR / out_filename)
