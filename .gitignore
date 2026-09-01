@@ -22,3 +22,7 @@ Thumbs.db
 # Editor backups
 *.swp
 *~
+
+# Your own background clips are user content, not part of the app.
+assets/backgrounds/custom/*
+!assets/backgrounds/custom/README.md
