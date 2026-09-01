@@ -1,114 +1,83 @@
-<div align="center">
+# ShortGeek
 
-<img src="https://raw.githubusercontent.com/techygeekshome/Shorts-Studio/main/Branding/shorts-studio-logo.png" alt="Shorts Studio logo" width="96" height="96">
+Turns a guide into a vertical short, on your own machine.
 
-# Shorts Studio
+Point ShortGeek at one of your own articles, any RSS feed or article URL, or just a one line idea.
+It drafts a script, narrates it, burns in word by word captions, and renders a 1080x1920 MP4 ready
+to upload to TikTok, YouTube Shorts or Reels. No stock footage, no AI generated imagery, no
+subscription.
 
-**Turns a source — one of your own guides, any RSS feed/URL, or a bare topic prompt — into a finished vertical short: narrated, captioned, and built from real code/commands and legible text cards.**
+Part of the [TechyGeeksHome](https://techygeekshome.info/geek-tools/) range.
 
-[![Version](https://img.shields.io/badge/version-1.12.0-4c9bff)](https://github.com/techygeekshome/Shorts-Studio/releases)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-0078d4)](#%EF%B8%8F-quick-start)
-[![License](https://img.shields.io/badge/license-proprietary%20freeware-b7791f)](LICENSE)
-[![Made by TechyGeeksHome](https://img.shields.io/badge/made%20by-TechyGeeksHome-b191f2)](https://techygeekshome.info)
-[![Support on Ko-fi](https://img.shields.io/badge/support-Ko--fi-ff5e5b)](https://ko-fi.com/techygeekshome)
+## What it does
 
-[Quick start](#%EF%B8%8F-quick-start) · [How it works](#-how-it-works) · [Settings](#settings) · [License](#-license)
+- Four ways to start: your own site's guides, an RSS feed, any article URL, or a topic prompt
+- Drafts a hook, two to four beats and a call to action, all editable before you render
+- Narrates it with Microsoft Edge's free neural voices, with an offline voice as the fallback
+- Word level captions in three styles, timed from the voice engine rather than estimated
+- Eight built in backgrounds, or drop in your own MP4 loops
+- Renders to 1080x1920 H.264 MP4 and keeps a library of everything you have made
+- Queue several at once and let them render back to back
 
-</div>
+## Where the pictures come from
 
----
+This is the part most tools get wrong, so it is worth being plain about it.
 
-Turns a source (one of your own guides, any RSS feed/URL, or a bare topic prompt) into a finished vertical short: narrated, captioned, built from real code/commands and legible text cards over the guide's own real screenshots (panned, full-bleed) or another genuinely animated background — never AI-generated imagery.
+**Article Images** is the default. It pans slowly across the guide's own real screenshots, one per
+beat. That is real content specific to that guide, not a generic loop.
 
-## ⬇️ Quick start
+**Procedural backgrounds** are drawn in code, frame by frame: gradients, a terminal scroll, a
+typing loop, a clean light look, Code Rain, Bounce Orbit and a Sort Visualizer running a real
+bubble sort on a bar chart.
 
-**Windows**
-1. Install Python if you don't already have it (tick "Add python.exe to PATH" during install). Any modern Python 3 version works — `run.bat` no longer requires a specific one.
-2. Install ffmpeg: open PowerShell and run `winget install ffmpeg`, then close and reopen any terminal so PATH picks it up.
-3. Optional but recommended: `winget install eSpeak-NG.eSpeak-NG` — this is the offline backup voice, used automatically if Microsoft's free Edge voice endpoint is ever unreachable (see "Voice" below).
-4. Double-click `run.bat`. The first run creates a virtual environment and installs dependencies (takes a minute or two); after that it starts instantly.
+**Your own clips** go in the Backgrounds screen. Any aspect ratio works; it is cropped to fill
+rather than stretched. Gameplay footage goes here, recorded by you or licensed for creator reuse.
 
-The app opens in its own window. If a native window can't open for any reason, it falls back to opening in your default browser at http://127.0.0.1:4173.
+Nothing is AI generated and nothing is somebody else's footage passed off as yours.
 
-**macOS/Linux:** run `./run.sh` instead (install ffmpeg via `brew install ffmpeg` or your package manager first).
+## What it will not do
 
-### Using your own Anthropic (Claude) API key for the polish pass
+- **It does not invent facts.** Every line comes from the source text. The optional AI polish pass
+  rewords lines to sound more spoken and changes nothing about what they say.
+- **It does not need an account.** No signup, no subscription, no watermark you have to pay to
+  remove. The default voice and every background work with no keys at all.
+- **It does not upload for you.** Direct upload APIs are locked down, quota limited and change
+  constantly. You get a finished file and post it yourself.
+- **It does not send your work anywhere.** Everything renders on this machine. The only outbound
+  calls are to the voice service, and to a paid AI provider if you choose to add your own key.
 
-By default, scripts are written entirely by the built-in heuristic writer — no API key, no external calls. If you'd like Claude to lightly reword the lines (same facts, same structure, just more spoken-sounding), add your own key:
+## Voices
 
-1. Go to [console.anthropic.com](https://console.anthropic.com), sign in or create an account, and open API Keys (left sidebar) → Create Key. Note: this is a separate account/billing setup from a claude.ai subscription — API usage is billed per token, typically fractions of a cent per script here.
-2. Copy the key (starts with `sk-ant-`).
-3. In the app, open Settings, set LLM Provider to Anthropic (Claude), and paste the key into the API Key field. It's saved locally in `data/config.json` and only ever sent to Anthropic's API.
+Microsoft Edge's free neural voices are the default and need no signup. If that endpoint is
+unreachable, ShortGeek falls back to the offline eSpeak NG voice and says so in the render queue.
+ElevenLabs works too if you add your own API key and voice ID in Settings.
 
-Every script drafted from then on runs through the polish pass automatically. Nothing about which sentences/images are chosen changes — only the wording.
+## Optional AI polish
 
-## ✨ How it works
+Scripts are written by the built in heuristic writer with no API key and no external calls. If you
+want the lines reworded to sound more spoken, add your own Anthropic or OpenAI key in Settings.
+Same facts, same structure, only the wording changes. Leave the provider as None and everything
+still works.
 
-1. **Pick a source.** "My Guides" searches techygeekshome.info directly via WordPress's public API — no login, nothing scraped. "Website / RSS" accepts any RSS feed URL or a plain article URL, using a best-effort text+image extractor (quality varies more site to site than the WordPress adapter, since it doesn't have a clean structured API to work with). "Topic Prompt" skips a source entirely and drafts from a one-line idea.
+## Requirements
 
-2. **Script.** A heuristic writer condenses the source into a hook + 2-4 beats + a call-to-action, preferring steps paired with a real code/command block (these render as legible code cards) or a real image (a good signal of a concrete, well-described step, even though the image itself isn't shown) over plain prose. Nothing is invented — every claim comes from the source text. If you add an Anthropic or OpenAI key in Settings, an optional polish pass rewords the lines to sound more spoken without changing what they say. Everything is editable before you render.
+Windows 10 version 1809 or later, 64-bit. The installer bundles Python and ffmpeg, so there is
+nothing to install first.
 
-3. **Voice.** Defaults to Microsoft Edge's free neural TTS (no signup). If it's ever unreachable, the app automatically falls back to the offline eSpeak NG voice rather than failing the render — you'll see a note in the render queue if that happened. The offline fallback only works if eSpeak NG is installed (see Quick start above). It's optional — skip it if you're fine with the render simply failing on the rare occasion Edge's endpoint is unreachable — but installing it costs nothing and means a render never hard-fails for that reason. ElevenLabs is available if you add your own API key and voice ID in Settings.
+## Running from source
 
-4. **Visuals.** Every beat becomes a "card": real code/commands (styled like an editor, with light keyword colouring), or a bold numbered text callout. Screenshots were dropped from this — a full desktop-scale UI capture never reads on a 9:16 clip at phone-viewing distance no matter how it's sized, so consistent, always-legible text/code cards replaced them entirely. Every card gets a subtle Ken-Burns zoom/pan instead of sitting static.
+```
+run.bat
+```
 
-   Backgrounds have four flavours, all pickable in step 3:
-   - **Article Images** (default) — the guide's own real screenshots, slowly panned full-bleed behind each card, one image per beat (falling back to a generated look for any beat with no image of its own, and for the hook/CTA). This is real content specific to that guide, not a generic loop.
-   - **Procedural stills** — gradients, a terminal-scroll look, a typing-loop look, a clean-light look — panned/zoomed in code.
-   - **Procedural motion** — genuinely animated loops rendered frame-by-frame (not just a pan on a still): Code Rain, Bounce Orbit, and Sort Visualizer (a real bubble sort running live on a bar chart) — for when you want something eye-catching but unrelated to the guide's own images, with zero footage-hunting or licensing risk.
-   - **Your own clips** — drop `.mp4` loops into `assets/backgrounds/custom/` and they show up automatically in step 3. Any aspect ratio works — it's cropped to fill the frame, not stretched. This is the slot for gameplay footage — record it yourself, or source footage explicitly licensed for creator reuse. None of this is AI-generated or someone else's content passed off as yours.
-
-5. **Captions.** Word-level timing comes straight from the TTS engine (Edge gives real per-word timestamps; eSpeak/ElevenLabs fall back to a proportional-by-length estimate). Burned in as styled subtitles — Bold Highlight (word-by-word colour pop), Minimal, or Classic Subtitle.
-
-6. **Render.** ffmpeg composites background + cards + captions + your watermark + narration into a 1080×1920 mp4, saved to `data/library/`. The queue panel shows live progress; finished videos show up in the Library tab with a preview player and a download link.
-
-## Settings
-
-Everything is stored in `data/config.json`, created on first run (and excluded from this repo via `.gitignore`, since it's local machine state rather than source). Nothing is ever sent anywhere except to a service you've explicitly given a key for, and only when you use that feature. There's no telemetry, no account.
-
-- **Brand** — your site URL (used for "My Guides"), the handle shown in the watermark/CTA line, and the watermark's logo letters.
-- **Voices** — which Edge voice to use by default, and optional ElevenLabs credentials.
-- **Script AI polish** — optional; leave the provider as "None" and everything still works with zero API keys.
-
-## 🚀 What's next
-
-Not built yet, but the architecture leaves room:
-
-- Add an official Anthropic/OpenAI Python SDK integration instead of raw `requests` calls, if you end up leaning on the AI-polish step heavily.
-- More procedural motion background styles alongside Code Rain, Bounce Orbit and Sort Visualizer, if those three aren't enough variety.
-- Auto-generated thumbnails/preview scrubbing for the video player in the Library tab.
-- Square (1:1) and landscape (16:9) export alongside the default 9:16, for platforms/placements that want them.
-- Direct-upload APIs (YouTube/TikTok/Instagram) — deliberately left out for now, same reasoning the old tool had: those APIs are locked down, quota-limited, and change often. Exporting a finished file you upload yourself sidesteps all of that.
-
-## 🛠️ Troubleshooting
-
-- **"ffmpeg wasn't found"** — install it (`winget install ffmpeg`) and open a fresh terminal so PATH updates, then re-run `run.bat`.
-- **Dependency install fails / a package fails to build from source** — this usually means pip picked a package version with no ready-made Windows wheel for your Python version. First try upgrading pip itself (`.venv\Scripts\python.exe -m pip install --upgrade pip`) and re-running `run.bat`. If it still fails, note which package failed in the pip output and bump that one pin in `requirements.txt` to a newer release.
-- **`ModuleNotFoundError` when starting** — this means the dependency install didn't actually finish (check the terminal window for a pip error above it). Always launch via `run.bat` / `run.sh`, not `python desktop.py` directly, so the checks above run first.
-- **A render fails immediately** — check the render queue's message text first; ffmpeg errors are also printed to the terminal window `run.bat` opened.
-- **Edge voice sounds robotic, or you see "eSpeak NG isn't installed"** — the app tried the free Edge voice first and it failed (a 403 in the terminal is normal here — Microsoft's endpoint is unofficial and occasionally rejects requests, unrelated to your setup), so it tried to fall back to the offline eSpeak NG voice, which isn't installed. Run `winget install eSpeak-NG.eSpeak-NG` in PowerShell, reopen your terminal, and re-render — you'll always have a working fallback from then on, even on renders where Edge fails. If Edge keeps failing repeatedly rather than occasionally, configure ElevenLabs in Settings for a premium voice that doesn't depend on it at all.
-- **The video looks text/code-card heavy with no screenshots** — that's by design, not a bug: real screenshots never stayed legible at 9:16 phone size, so every beat renders as a code or bold-text card instead of faking (or shrinking) a screenshot. If it still feels flat, try one of the Code Rain / Bounce Orbit / Sort Visualizer backgrounds, or drop your own clips into `assets/backgrounds/custom/`.
+The first run creates a virtual environment and installs the dependencies. On macOS or Linux use
+`./run.sh` and install ffmpeg yourself first.
 
 ## Fonts
 
-Roboto (Apache License 2.0) is reused from the old project's `fonts/` folder — see `assets/fonts/LICENSE.txt`. DejaVu Sans Mono (bundled with most Linux distros, permissively licensed) is used for code cards.
+Roboto, Apache-2.0, in `assets/fonts/`. DejaVu Sans Mono is used for code cards.
 
-## 🐛 Support & contributing
+## Licence
 
-Found a bug or have a request? [Open an issue](https://github.com/techygeekshome/Shorts-Studio/issues).
-
-## 📄 License
-
-Shorts Studio is free to download and use. This is proprietary freeware, not open source — see [LICENSE](LICENSE) for the full terms.
-
-© 2026 TechyGeeksHome | Andrew Armstrong.
-
----
-
-<div align="center">
-
-Made with ❤️ by [**TechyGeeksHome**](https://techygeekshome.info)
-
-[Website](https://techygeekshome.info) · [YouTube](https://www.youtube.com/channel/UCtEuFj1SMLiuRoucD1hv8dA) · [X](https://x.com/TechyGeeks1) · [Facebook](https://www.facebook.com/techygeeks.home) · [Instagram](https://www.instagram.com/andrewarmstrongtgh/)
-
-</div>
+Free to download and use, including at work. Proprietary freeware rather than open source. See
+[LICENSE](LICENSE) for the terms.
