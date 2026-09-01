@@ -18,6 +18,7 @@ import os
 import socket
 import sys
 import threading
+import traceback
 import time
 import webbrowser
 from pathlib import Path
@@ -102,6 +103,45 @@ def _free_port(preferred: int = PREFERRED_PORT) -> int:
     return 0
 
 
+def _show_startup_failure(failure: list[str]) -> None:
+    """Say what went wrong, in the window, instead of leaving the browser to report a
+    refused connection. A crash report the user can read and send is worth more than a
+    silent thread and an error page about proxies and firewalls."""
+    detail = failure[0] if failure else "The server did not start and gave no reason."
+    log = _crash_log_path()
+    try:
+        log.parent.mkdir(parents=True, exist_ok=True)
+        log.write_text(detail, encoding="utf-8")
+    except Exception:
+        pass
+
+    body = (
+        "ShortGeek could not start.\n\n"
+        "The part of the app that serves its screens failed to load, so there is "
+        "nothing to show. This is a fault in the build rather than anything you did.\n\n"
+        f"The details have been written to:\n{log}\n\n"
+        "Please report it at github.com/techygeekshome/ShortGeek/issues and attach "
+        "that file.\n\n"
+        "-----\n\n" + detail
+    )
+
+    if sys.platform == "win32":
+        try:
+            import ctypes
+
+            ctypes.windll.user32.MessageBoxW(0, body, f"{APP_NAME} could not start", 0x10)
+            return
+        except Exception:
+            pass
+    print(body, file=sys.stderr)
+
+
+def _crash_log_path() -> Path:
+    base = os.environ.get("LOCALAPPDATA") or os.environ.get("XDG_DATA_HOME")
+    root = Path(base) if base else Path.home() / ".local" / "share"
+    return root / "TechyGeeksHome" / APP_NAME / "startup-error.txt"
+
+
 def main() -> int:
     _silence_console_windows()
     _silence_proactor_reset()
@@ -112,27 +152,65 @@ def main() -> int:
     port = _free_port()
     url = f"http://127.0.0.1:{port}"
 
-    def _serve():
-        uvicorn.run("app.main:app", host="127.0.0.1", port=port, log_level="warning")
+    # The application object is imported here and handed to uvicorn directly, rather
+    # than passing it the string "app.main:app". Uvicorn resolves a string by importing
+    # it itself, and when that import fails inside a frozen build it prints one line to
+    # a console nobody is looking at and the thread dies. The window then opens on a
+    # browser page saying the connection was refused, which says nothing about what
+    # actually went wrong. Importing here means a failure lands in the block below.
+    failure: list[str] = []
+    try:
+        from app.main import app as asgi_app
+    except Exception:
+        failure.append(traceback.format_exc())
+        asgi_app = None
 
-    thread = threading.Thread(target=_serve, daemon=True)
-    thread.start()
+    def _serve():
+        try:
+            uvicorn.run(asgi_app, host="127.0.0.1", port=port, log_level="warning")
+        except Exception:
+            failure.append(traceback.format_exc())
+
+    if asgi_app is not None:
+        thread = threading.Thread(target=_serve, daemon=True)
+        thread.start()
+    else:
+        thread = None
 
     # Wait for the server to actually accept a connection rather than guessing.
+    started = False
     for _ in range(200):
+        if failure:
+            break
         with socket.socket() as s:
             s.settimeout(0.1)
             try:
                 s.connect(("127.0.0.1", port))
+                started = True
                 break
             except OSError:
                 time.sleep(0.05)
+
+    if not started:
+        _show_startup_failure(failure)
+        return 1
+
+    # Used by the build check, which runs this executable on a machine with no desktop
+    # and asks it for a page. It is the only way to find out whether the thing that was
+    # packaged actually serves anything, which is the question a normal test cannot
+    # answer and the one that matters.
+    if os.environ.get("SHORTGEEK_NO_WINDOW"):
+        print(url, flush=True)
+        if thread is not None:
+            thread.join()
+        return 0
 
     try:
         import webview
     except Exception:
         webbrowser.open(url, new=2)
-        thread.join()
+        if thread is not None:
+            thread.join()
         return 0
 
     webview.settings["ALLOW_DOWNLOADS"] = True
