@@ -8,13 +8,20 @@ The app was called Shorts Studio up to 1.12.0 and was never released publicly.
 Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
 older entries are kept below because the fixes in them are real."""
 
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 
 # Shown on the About page. Kept here so there is one place to change it if the
 # licence ever changes.
 APP_LICENCE = "Freeware"
 
 CHANGELOG = [
+    {
+        "version": "1.0.2",
+        "notes": [
+            "Fixed the app failing to start with \"Unable to configure formatter 'default'\". A windowed app has no console, so it starts with nowhere to write; the web server tried to ask that nowhere whether it was a terminal and fell over. It now writes to a log file in your profile instead.",
+            "The build check now runs the packaged app with its output taken away, which is the shape you actually get. The 1.0.1 check redirected the output to a file and hid this exact fault.",
+        ],
+    },
     {
         "version": "1.0.1",
         "notes": [
