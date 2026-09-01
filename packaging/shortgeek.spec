@@ -6,11 +6,20 @@ temp folder on every launch, which is slow with a payload this size and is a
 well-known trigger for antivirus heuristics. This range is already unsigned, so
 there is no sense in adding a second reason to be flagged.
 """
+import sys
 from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 ROOT = Path(SPECPATH).parent
+
+# collect_submodules imports the package in an isolated subprocess whose sys.path
+# does not include the project. Without this it returns an empty list, silently,
+# and the whole app package is left out of the build: the executable then starts,
+# fails to import app.main, and shows a browser page saying the connection was
+# refused. Putting the project on sys.path first is what makes the collection real.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 datas = [
     (str(ROOT / "app" / "templates"), "app/templates"),
@@ -31,9 +40,16 @@ for exe in ("ffmpeg.exe", "ffprobe.exe"):
 
 datas += collect_data_files("edge_tts")
 
+datas += collect_data_files("trafilatura")
+datas += collect_data_files("courlan")
+datas += collect_data_files("htmldate")
+datas += collect_data_files("justext")
+
 hiddenimports = (
     collect_submodules("uvicorn")
     + collect_submodules("app")
+    + collect_submodules("trafilatura")
+    + collect_submodules("courlan")
     + [
         "anyio",
         "h11",
@@ -41,6 +57,10 @@ hiddenimports = (
         "fastapi",
         "jinja2",
         "edge_tts",
+        "feedparser",
+        "requests",
+        "trafilatura",
+        "bs4",
         "lxml",
         "lxml._elementpath",
         "PIL",
