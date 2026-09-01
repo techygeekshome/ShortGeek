@@ -1,4 +1,4 @@
-// TGH Shorts Studio -- frontend. Plain JS on purpose: no build step, so the
+// ShortGeek -- frontend. Plain JS on purpose: no build step, so the
 // app stays as easy to tinker with as the mockup it was built from.
 
 const state = {
@@ -100,7 +100,7 @@ async function loadGuides(query = "") {
   try {
     const data = await jsonFetch(`/api/guides?search=${encodeURIComponent(query)}&per_page=20`);
     if (!data.items.length) {
-      list.innerHTML = '<div class="hint">No guides found.</div>';
+      list.innerHTML = `<div class="hint">${escapeHtml(data.notice || "No guides found.")}</div>`;
       return;
     }
     list.innerHTML = "";
@@ -413,7 +413,10 @@ async function uploadClip(file) {
 async function loadAbout() {
   try {
     const data = await jsonFetch("/api/about");
-    $("#aboutVersion").textContent = `Version ${data.version}`;
+    $("#aboutVersion").textContent = data.version;
+    APP_VERSION = data.version;
+    $("#verline").textContent = "v" + data.version;
+    if (data.licence) $("#aboutLicence").textContent = data.licence;
     const list = $("#changelogList");
     list.innerHTML = "";
     data.changelog.forEach((entry) => {
@@ -541,9 +544,8 @@ async function loadSettings() {
   $("#set_elevenlabs_voice_id").value = cfg.elevenlabs_voice_id || "";
   $("#set_llm_provider").value = cfg.llm_provider || "none";
   $("#set_brand_style_notes").value = cfg.brand_style_notes || "";
-  $("#brandName").textContent = "Shorts Studio";
-  $("#brandSub").textContent = cfg.brand_handle || "";
-  $("#brandMark").textContent = cfg.logo_letters || "TGH";
+  // The sidebar shows the APP's identity, not the user's. Their brand goes on the
+  // end card of the videos, which is set under Settings and previewed there.
   // Secret fields intentionally left blank -- see saveSettings().
 }
 
@@ -603,6 +605,8 @@ function init() {
     e.target.value = "";
   });
 
+  initChrome();
+
   loadGuides();
   loadSettings();
   loadLibrary();
@@ -612,3 +616,107 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+
+// -------------------------------------------------- chrome: updates, help, brand
+
+var APP_VERSION = "0.0.0";
+const REPO = "techygeekshome/ShortGeek";
+
+function openVeil(el) { el.classList.add("on"); }
+function closeVeils() { document.querySelectorAll(".veil").forEach((v) => v.classList.remove("on")); }
+
+function cmpVer(a, b) {
+  const pa = String(a).replace(/^v/, "").split(".").map((n) => parseInt(n, 10) || 0);
+  const pb = String(b).replace(/^v/, "").split(".").map((n) => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+    const x = pa[i] || 0, y = pb[i] || 0;
+    if (x !== y) return x > y ? 1 : -1;
+  }
+  return 0;
+}
+
+async function checkUpdates(quiet) {
+  const btn = $("#btnUpdate");
+  const label = btn.textContent;
+  btn.disabled = true; btn.textContent = "Checking...";
+  try {
+    const r = await fetch("https://api.github.com/repos/" + REPO + "/releases/latest",
+                          { headers: { Accept: "application/vnd.github+json" } });
+    if (!r.ok) throw new Error("GitHub returned " + r.status);
+    const d = await r.json();
+    const latest = String(d.tag_name || "").replace(/^v/, "");
+    const cell = $("#aboutLatest");
+    if (cell) cell.textContent = latest || "unknown";
+    const status = $("#aboutStatus");
+    if (latest && cmpVer(latest, APP_VERSION) > 0) {
+      if (status) {
+        status.innerHTML = '<span class="badge new">Update available</span> Version ' +
+          escapeHtml(latest) + ' is out. <a href="' + escapeHtml(d.html_url) +
+          '" target="_blank" rel="noopener">See what changed</a>.';
+      }
+      switchView("about");
+    } else if (!quiet && status) {
+      status.innerHTML = '<span class="badge ok">Up to date</span> You are running the latest version.';
+    }
+  } catch (e) {
+    const cell = $("#aboutLatest");
+    if (cell) cell.textContent = "check failed";
+    const status = $("#aboutStatus");
+    if (!quiet && status) {
+      status.innerHTML = '<span class="badge off">Could not check</span> No answer from GitHub. Try again later.';
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = label;
+  }
+}
+
+async function maybeFirstRun() {
+  try {
+    const cfg = await jsonFetch("/api/settings");
+    if (!cfg.brand_configured) openVeil($("#brandVeil"));
+  } catch (e) { /* if settings can't be read, don't block the app */ }
+}
+
+async function saveFirstRun(skip) {
+  const patch = { brand_configured: true };
+  if (!skip) {
+    const name = $("#fr_brand_name").value.trim();
+    const handle = $("#fr_brand_handle").value.trim();
+    const letters = $("#fr_logo_letters").value.trim();
+    if (name) patch.brand_name = name;
+    if (handle) { patch.brand_handle = handle; patch.site_url = handle.startsWith("http") ? handle : "https://" + handle; }
+    if (letters) patch.logo_letters = letters.toUpperCase();
+  }
+  try {
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    });
+  } catch (e) { /* saving the brand should never stop the app opening */ }
+  closeVeils();
+  loadSettings();
+}
+
+function initChrome() {
+  $("#btnUpdate").addEventListener("click", () => checkUpdates(false));
+  $("#btnSupport").addEventListener("click", () => openVeil($("#supportVeil")));
+
+  document.querySelectorAll(".veil").forEach((v) => {
+    v.addEventListener("click", (e) => { if (e.target === v && v.id !== "brandVeil") closeVeils(); });
+  });
+  document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", closeVeils));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !$("#brandVeil").classList.contains("on")) closeVeils();
+  });
+  document.querySelectorAll("[data-open]").forEach((b) => {
+    b.addEventListener("click", () => window.open(b.dataset.open, "_blank", "noopener"));
+  });
+
+  $("#frSave").addEventListener("click", () => saveFirstRun(false));
+  $("#frSkip").addEventListener("click", (e) => { e.preventDefault(); saveFirstRun(true); });
+
+  loadAbout();
+  maybeFirstRun();
+}
