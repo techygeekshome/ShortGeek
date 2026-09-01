@@ -1,0 +1,72 @@
+name: Remove the bundled stock clips
+
+# One-shot housekeeping job, run by hand.
+#
+# assets/backgrounds/custom/ held 42 stock video files, about 1.1 GB. Stock
+# licences generally allow you to USE footage but not to redistribute the files
+# themselves, and a public repo plus an installer is redistribution. They were
+# never needed in the repo either: the folder is meant to hold clips the user
+# supplies.
+#
+# This deletes them from the working tree and leaves a README explaining where
+# to get properly licensed clips. It does NOT rewrite history, so the blobs are
+# still in past commits and the clone size does not drop. Rewriting history is a
+# force-push and is deliberately left as a separate, deliberate decision.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type DELETE to confirm removing the stock clips'
+        required: true
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    if: inputs.confirm == 'DELETE'
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Remove the clips and leave instructions
+        run: |
+          set -e
+          DIR=assets/backgrounds/custom
+          if [ -d "$DIR" ]; then
+            echo "Before:"
+            du -sh "$DIR" || true
+            find "$DIR" -type f \( -name '*.mp4' -o -name '*.mov' -o -name '*.webm' -o -name '*.mkv' \) -print -delete
+          fi
+          mkdir -p "$DIR"
+          cp .github/BACKGROUNDS_README.md "$DIR/README.md"
+          echo "After:"
+          ls -la "$DIR"
+
+      - name: Ignore clips from now on
+        run: |
+          set -e
+          touch .gitignore
+          if ! grep -q 'assets/backgrounds/custom/' .gitignore; then
+            {
+              echo ""
+              echo "# Your own background clips are user content, not part of the app."
+              echo "assets/backgrounds/custom/*"
+              echo "!assets/backgrounds/custom/README.md"
+            } >> .gitignore
+          fi
+
+      - name: Commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Remove the bundled stock clips and explain where to get your own"
+            git push
+          fi
