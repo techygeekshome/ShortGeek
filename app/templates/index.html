@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TGH Shorts Studio</title>
+<title>ShortGeek</title>
 <link rel="stylesheet" href="/static/app.css?v={{ app_version }}">
 </head>
 <body>
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark" id="brandMark">TGH</div>
-      <div><div class="brand-name" id="brandName">Shorts Studio</div><div class="brand-sub" id="brandSub">techygeekshome.info</div></div>
+      <div class="brand-mark" id="brandMark">SG</div>
+      <div><div class="brand-name" id="brandName">ShortGeek</div><div class="brand-sub" id="brandSub">by TechyGeeksHome</div></div>
     </div>
     <div class="nav-item active" data-view="new">➕ New Short</div>
     <div class="nav-item" data-view="library">🎞️ Library</div>
@@ -20,6 +20,12 @@
     <div class="nav-label">Config</div>
     <div class="nav-item" data-view="settings">⚙️ Settings</div>
     <div class="nav-item" data-view="about">ℹ️ About</div>
+
+    <div class="nav-foot">
+      <button class="ghost-btn" id="btnUpdate">Check for updates</button>
+      <button class="ghost-btn" id="btnSupport">Support</button>
+      <div class="verline" id="verline">v0.0.0</div>
+    </div>
   </aside>
 
   <main class="content">
@@ -171,27 +177,40 @@
     <!-- ============ ABOUT VIEW ============ -->
     <section id="view-about" class="view">
       <div class="screen-title">About</div>
-      <div class="screen-sub" id="aboutVersion">Version …</div>
+      <div class="screen-sub" id="aboutStatus">ShortGeek turns a guide, a feed or a topic into a narrated, captioned vertical short.</div>
 
       <div class="step">
-        <div class="step-head"><div class="step-title">TGH Shorts Studio</div></div>
-        <p style="font-size:13px;line-height:1.55;color:var(--text);margin:0 0 8px;">
-          A local, no-login tool that turns your guides (or any RSS/URL/topic) into a
-          narrated, captioned short-form video — built from real code/screenshots and
-          generated visuals, never AI-generated imagery. Runs entirely on this computer;
-          nothing is sent anywhere except a service you've explicitly given a key for.
-        </p>
-        <p style="font-size:11.5px;color:var(--muted-2);margin:0;">
-          This is a custom build made for you, not a published app with a live
-          updater — there's nothing to "check for updates" against. New versions
-          arrive as a new zip; extract it over this folder to update (your
-          data/config.json and Library are kept, since they live outside app/).
-        </p>
+        <div class="step-head"><div class="step-title">ShortGeek</div></div>
+        <dl class="kv">
+          <dt>Version</dt><dd id="aboutVersion">...</dd>
+          <dt>Latest release</dt><dd id="aboutLatest">not checked</dd>
+          <dt>Author</dt><dd class="plain">Andy Armstrong</dd>
+          <dt>Licence</dt><dd class="plain" id="aboutLicence">Freeware</dd>
+          <dt>Video engine</dt><dd class="plain">ffmpeg (bundled)</dd>
+        </dl>
+
+        <h4>What it does</h4>
+        <p>Takes one of your guides, any RSS feed or URL, or a bare topic, and builds a
+          narrated, captioned 1080x1920 short from it. The script, the voice, the captions
+          and the visuals are all produced on this computer.</p>
+
+        <h4>What it will not do</h4>
+        <p>No account and no sign-up. It never uploads your videos and it never posts on
+          your behalf. There is no telemetry. It makes no outbound call at all unless you
+          press Check for updates, or you have explicitly configured a voice or AI key of
+          your own, and then only for that feature.</p>
+
+        <div class="linkrow">
+          <button class="btn-ghost" data-open="https://techygeekshome.info/shortgeek/">Product page</button>
+          <button class="btn-ghost" data-open="https://github.com/techygeekshome/ShortGeek">Source on GitHub</button>
+          <button class="btn-ghost" data-open="https://github.com/techygeekshome/ShortGeek/issues">Report a problem</button>
+          <button class="btn-ghost" data-open="https://ko-fi.com/techygeekshome">Buy me a coffee</button>
+        </div>
       </div>
 
       <div class="step">
         <div class="step-head"><div class="step-title">What's changed</div></div>
-        <div id="changelogList"><div class="hint">Loading…</div></div>
+        <div id="changelogList"><div class="hint">Loading...</div></div>
       </div>
     </section>
 
@@ -240,6 +259,70 @@
 
   </main>
 </div>
+
+<!-- ===================== first run: whose brand is this ===================== -->
+<div class="veil" id="brandVeil">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Set up your brand">
+    <div class="mh">
+      <div class="brand-mark" style="width:38px;height:38px">SG</div>
+      <div><h3>Make it yours</h3><div class="by">One time only</div></div>
+    </div>
+    <div class="mb">
+      <p>ShortGeek puts a name and a handle on the end card of every video it makes.
+        Set yours now so your shorts go out as you, not as somebody else.</p>
+
+      <label class="field-label">Your name or channel</label>
+      <input id="fr_brand_name" class="text-input" placeholder="e.g. Acme Tech" maxlength="40">
+
+      <label class="field-label">Handle or website</label>
+      <input id="fr_brand_handle" class="text-input" placeholder="e.g. acmetech.com" maxlength="60">
+
+      <label class="field-label">Logo letters</label>
+      <input id="fr_logo_letters" class="text-input" placeholder="e.g. AT" maxlength="4">
+
+      <p style="margin-top:14px">You can change any of this later in Settings.</p>
+
+      <div class="linkrow">
+        <button class="generate-btn" id="frSave" style="max-width:none;margin:0">Save and start</button>
+      </div>
+      <p style="margin-top:10px;font-size:11.5px">
+        <a href="#" id="frSkip" style="color:var(--muted-2)">Skip for now</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== support ===================== -->
+<div class="veil" id="supportVeil">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Support">
+    <div class="mh">
+      <div><h3>Support</h3><div class="by">ShortGeek</div></div>
+      <button class="btn-ghost close" data-close="1">Close</button>
+    </div>
+    <div class="mb">
+      <h4>Something not working</h4>
+      <p>Open an issue on GitHub. Say what source you used, what you expected and what you
+        got. Issues are read by a person, not a bot.</p>
+
+      <h4>The voice failed, or sounds robotic</h4>
+      <p>The free Edge voice uses an unofficial Microsoft endpoint that occasionally rejects a
+        request. Install the offline fallback with <code>winget install eSpeak-NG.eSpeak-NG</code>
+        and you will always have a working voice, even when Edge has a bad day.</p>
+
+      <h4>Rendering fails</h4>
+      <p>Check the queue panel for the error text. Almost every render failure is either a
+        source that returned no usable text, or a background clip the encoder could not read.</p>
+
+      <div class="linkrow">
+        <button class="btn-ghost" data-open="https://github.com/techygeekshome/ShortGeek/issues/new">Open an issue</button>
+        <button class="btn-ghost" data-open="https://techygeekshome.info/shortgeek/">Product page</button>
+        <button class="btn-ghost" data-open="https://techygeekshome.info/">All our free tools</button>
+        <button class="btn-ghost" data-open="https://ko-fi.com/techygeekshome">Buy me a coffee</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/static/app.js?v={{ app_version }}"></script>
 </body>
 </html>
