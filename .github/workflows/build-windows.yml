@@ -109,35 +109,54 @@ jobs:
           Write-Host ("Bundle is {0:N1} MB" -f $size)
 
       # Everything above proves the right files are in the folder. None of it proves the
-      # thing runs. 1.0.0 passed every check above and then opened on a browser page
-      # saying the connection was refused, because the app package had been left out of
-      # the bundle and the server thread died on import. So the executable is now
-      # actually started, headless, and asked for a page.
+      # thing runs. 1.0.0 passed every check above and then opened on a browser page saying the
+      # connection was refused, because the app package had been left out of the bundle.
+      #
+      # 1.0.1 then passed a first version of this check and still failed on a real machine,
+      # because the check redirected the app's output to files. A windowed build has no console
+      # and starts with no standard streams at all, and uvicorn's log formatter asks stdout
+      # whether it is a terminal. Handing it a file hid exactly the thing that was broken.
+      #
+      # So it runs twice: once normally, and once with the streams taken away, which is the shape
+      # a user actually gets. Nothing is redirected; if it fails, the app's own log files are what
+      # gets printed, because those are what a user would send in.
       - name: Run the packaged app and ask it for a page
         shell: pwsh
         run: |
-          $env:SHORTGEEK_NO_WINDOW = '1'
-          $p = Start-Process -FilePath 'dist\ShortGeek\ShortGeek.exe' -PassThru `
-                 -RedirectStandardOutput out.txt -RedirectStandardError err.txt
-          try {
-            $ok = $false
-            foreach ($i in 1..60) {
-              Start-Sleep -Seconds 1
-              if ($p.HasExited) { break }
-              try {
-                $r = Invoke-WebRequest -Uri 'http://127.0.0.1:4173/' -UseBasicParsing -TimeoutSec 5
-                if ($r.StatusCode -eq 200 -and $r.Content -match 'New Short') { $ok = $true; break }
-              } catch { }
+          $logDir = Join-Path $env:LOCALAPPDATA 'TechyGeeksHome\ShortGeek'
+
+          function Invoke-Check([string]$label, [bool]$noStreams) {
+            Remove-Item (Join-Path $logDir 'startup-error.txt') -EA SilentlyContinue
+            $env:SHORTGEEK_NO_WINDOW = '1'
+            if ($noStreams) { $env:SHORTGEEK_NO_STREAMS = '1' } else { Remove-Item Env:\SHORTGEEK_NO_STREAMS -EA SilentlyContinue }
+
+            $p = Start-Process -FilePath 'dist\ShortGeek\ShortGeek.exe' -PassThru -WindowStyle Hidden
+            try {
+              $ok = $false
+              foreach ($i in 1..60) {
+                Start-Sleep -Seconds 1
+                if ($p.HasExited) { break }
+                try {
+                  $r = Invoke-WebRequest -Uri 'http://127.0.0.1:4173/' -UseBasicParsing -TimeoutSec 5
+                  if ($r.StatusCode -eq 200 -and $r.Content -match 'New Short') { $ok = $true; break }
+                } catch { }
+              }
+              if (-not $ok) {
+                foreach ($f in @('startup-error.txt','output.txt')) {
+                  $path = Join-Path $logDir $f
+                  if (Test-Path $path) { Write-Host "--- $f ---"; Get-Content $path }
+                }
+                throw "$label : the packaged app never served its own interface."
+              }
+              Write-Host "$label : started and served its interface."
+            } finally {
+              if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force }
+              Start-Sleep -Seconds 2
             }
-            if (-not $ok) {
-              Write-Host '--- stdout ---'; Get-Content out.txt -EA SilentlyContinue
-              Write-Host '--- stderr ---'; Get-Content err.txt -EA SilentlyContinue
-              throw 'The packaged app never served its own interface.'
-            }
-            Write-Host 'The packaged app started and served its interface.'
-          } finally {
-            if (-not $p.HasExited) { Stop-Process -Id $p.Id -Force }
           }
+
+          Invoke-Check 'with a console' $false
+          Invoke-Check 'with no console, as a user gets it' $true
 
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
