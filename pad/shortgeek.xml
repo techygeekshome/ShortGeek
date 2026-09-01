@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>TechyGeeksHome</MASTER_PAD_EDITOR>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products.</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <Company_Info>
+    <Company_Name>TechyGeeksHome</Company_Name>
+    <Address_1></Address_1>
+    <Address_2></Address_2>
+    <City_Town></City_Town>
+    <State_Province></State_Province>
+    <Zip_Postal_Code></Zip_Postal_Code>
+    <Country>United Kingdom</Country>
+    <Company_WebSite_URL>https://techygeekshome.info</Company_WebSite_URL>
+    <Contact_Info>
+      <Author_First_Name>Andy</Author_First_Name>
+      <Author_Last_Name>Armstrong</Author_Last_Name>
+      <Author_Email>techygeeks@outlook.com</Author_Email>
+      <Contact_First_Name>Andy</Contact_First_Name>
+      <Contact_Last_Name>Armstrong</Contact_Last_Name>
+      <Contact_Email>techygeeks@outlook.com</Contact_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>techygeeks@outlook.com</Sales_Email>
+      <Support_Email>techygeeks@outlook.com</Support_Email>
+      <General_Email>techygeeks@outlook.com</General_Email>
+    </Support_Info>
+  </Company_Info>
+  <Program_Info>
+    <Program_Name>ShortGeek</Program_Name>
+    <Program_Version>1.0.0</Program_Version>
+    <Program_Release_Month>09</Program_Release_Month>
+    <Program_Release_Day>01</Program_Release_Day>
+    <Program_Release_Year>2026</Program_Release_Year>
+    <Program_Cost_Dollars>0</Program_Cost_Dollars>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>New Release</Program_Release_Status>
+    <Program_Install_Support>Install and Uninstall</Program_Install_Support>
+    <Program_OS_Support>Win10,Win11</Program_OS_Support>
+    <Program_Language>English</Program_Language>
+    <Program_Change_Info>First public release.</Program_Change_Info>
+    <Program_Specific_Category>Multimedia &amp; Design::Video Editors</Program_Specific_Category>
+    <Program_Category_Class>Multimedia &amp; Design</Program_Category_Class>
+    <Program_System_Requirements>Windows 10 or 11, 64-bit. Python and ffmpeg are inside the installer, so nothing else is needed.</Program_System_Requirements>
+    <File_Info>
+      <File_Size_Bytes>74698237</File_Size_Bytes>
+      <File_Size_K>72947</File_Size_K>
+      <File_Size_MB>71</File_Size_MB>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+    </Expire_Info>
+  </Program_Info>
+  <Program_Descriptions>
+    <English>
+      <Keywords>short video maker, vertical video, tiktok, youtube shorts, reels, text to speech, captions, subtitles, offline, free, windows</Keywords>
+      <Char_Desc_45>Turn an article into a narrated short, free</Char_Desc_45>
+      <Char_Desc_80>Turns a guide, feed or topic into a narrated, captioned vertical short</Char_Desc_80>
+      <Char_Desc_250>ShortGeek turns one of your articles, any RSS feed or URL, or a bare topic into a narrated, captioned 1080x1920 short. Script, voice, captions and visuals are all produced on your own machine. No account and nothing uploaded.</Char_Desc_250>
+      <Char_Desc_450>ShortGeek turns an article, an RSS feed, a URL or a topic into a finished vertical short: written, narrated, captioned and rendered on your own machine. It drafts a script with no API key, speaks it with a free neural voice or an offline fallback, burns in word-level captions, and builds visuals from the article's own images or animated backgrounds. Out comes a 1080x1920 MP4 for TikTok, Reels and Shorts. No account, no upload, no watermark.</Char_Desc_450>
+      <Char_Desc_2000>ShortGeek turns an article into a narrated, captioned vertical short.
+
+Point it at one of your own WordPress guides, any RSS feed or article URL, a bare topic prompt, or a script you have already written. ShortGeek drafts a script from it, reads it aloud, times captions to the words, builds the visuals and renders a 1080x1920 MP4 ready for TikTok, Instagram Reels and YouTube Shorts.
+
+The script writer needs no API key and no account. If you would rather have an AI polish pass, you can supply your own Anthropic or OpenAI key, and if you do not, nothing is sent anywhere.
+
+Three voices are available: the free Edge neural voice, eSpeak NG as a fully offline fallback, and ElevenLabs if you have a key of your own. Captions come from real word-level timings, not guesswork, and burn in as Bold Highlight, Minimal or Classic Subtitle.
+
+Backgrounds can be the article's own screenshots panned slowly full-bleed, procedural stills, genuinely animated loops rendered frame by frame, or your own video clips. Nothing is AI-generated imagery.
+
+On first run ShortGeek asks for your name, handle and logo letters, because it puts them on the end card of every video. Your videos go out as you.
+
+No account, no sign-up, no telemetry, no watermark and no export limit. It never uploads your videos and never posts on your behalf. Python and ffmpeg are inside the installer, so there is nothing to install first.</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>https://techygeekshome.info/shortgeek/</Application_Info_URL>
+      <Application_Order_URL></Application_Order_URL>
+      <Application_Screenshot_URL>https://techygeekshome.info/wp-content/uploads/2026/08/shortgeek-01-open.png</Application_Screenshot_URL>
+      <Application_Icon_URL>https://techygeekshome.info/wp-content/uploads/2026/08/shortgeek-01-open.png</Application_Icon_URL>
+      <Application_XML_File_URL>https://raw.githubusercontent.com/techygeekshome/ShortGeek/main/pad/shortgeek.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>https://github.com/techygeekshome/ShortGeek/releases/latest/download/ShortGeekSetup.exe</Primary_Download_URL>
+      <Secondary_Download_URL></Secondary_Download_URL>
+    </Download_URLs>
+  </Web_Info>
+</XML_DIZ_INFO>
