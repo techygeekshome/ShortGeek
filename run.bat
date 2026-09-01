@@ -39,7 +39,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo Starting TGH Shorts Studio...
+echo Starting ShortGeek...
 python desktop.py
 
 pause

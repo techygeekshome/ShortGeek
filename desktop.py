@@ -50,7 +50,7 @@ try:
     import uvicorn
 except ModuleNotFoundError:
     print(
-        "\n[TGH Shorts Studio] Dependencies aren't installed yet (or the install\n"
+        "\n[ShortGeek] Dependencies aren't installed yet (or the install\n"
         "didn't finish). Run 'run.bat' (Windows) or './run.sh' (macOS/Linux) from\n"
         "this folder instead of running desktop.py directly -- it creates the\n"
         "virtual environment and installs everything needed first.\n"
@@ -72,7 +72,7 @@ def _check_ffmpeg() -> bool:
     if shutil.which("ffmpeg") and shutil.which("ffprobe"):
         return True
     print(
-        "\n[TGH Shorts Studio] ffmpeg wasn't found on your PATH.\n"
+        "\n[ShortGeek] ffmpeg wasn't found on your PATH.\n"
         "The app will still open, but rendering will fail until it's installed.\n"
         "Install it with:  winget install ffmpeg\n"
         "...then close and reopen this app (or open a new terminal) so PATH updates.\n"
@@ -96,12 +96,12 @@ def main():
         # (e.g. "Download" in the Library) silently does nothing.
         webview.settings["ALLOW_DOWNLOADS"] = True
 
-        webview.create_window("TGH Shorts Studio", url, width=1240, height=800, min_size=(980, 640))
+        webview.create_window("ShortGeek", url, width=1240, height=800, min_size=(980, 640))
         webview.start()
     except Exception as e:
-        print(f"[TGH Shorts Studio] Couldn't open a native window ({e}); opening in your browser instead.")
+        print(f"[ShortGeek] Couldn't open a native window ({e}); opening in your browser instead.")
         webbrowser.open(url, new=2)
-        print(f"[TGH Shorts Studio] Running at {url} -- leave this window open while you use it.")
+        print(f"[ShortGeek] Running at {url} -- leave this window open while you use it.")
         try:
             while True:
                 time.sleep(3600)
