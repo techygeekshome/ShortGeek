@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>shortgeek</id>
+    <version>1.0.2</version>
+    <title>ShortGeek</title>
+    <authors>TechyGeeksHome</authors>
+    <owners>techygeekshome</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/techygeekshome/ShortGeek/blob/main/LICENSE</licenseUrl>
+    <projectUrl>https://techygeekshome.info/shortgeek/</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/techygeekshome/ShortGeek@main/icons/shortgeek-256.png</iconUrl>
+    <description>ShortGeek turns an article, a feed or a one line topic into a finished vertical short on
+your own machine. It drafts the script from the source rather than inventing content.
+
+* Takes an article of your own, an RSS feed, an article URL, or a one line topic
+* Narrates with a free neural voice and burns in captions timed word by word
+* Renders 1080x1920 MP4, ready to upload to TikTok, Reels or YouTube Shorts
+* Backgrounds are the source article's own screenshots, animations drawn in code, or your clips
+* No AI generated imagery, no account, no watermark, no export limit
+
+Free to download and use. Python and ffmpeg are inside the installer, so there is nothing to
+install first.</description>
+    <summary>Free vertical short video maker for Windows, narrated and captioned, on your own machine</summary>
+    <releaseNotes>https://github.com/techygeekshome/ShortGeek/releases/tag/v1.0.2</releaseNotes>
+    <copyright>Copyright (c) 2026 TechyGeeksHome</copyright>
+    <tags>shortgeek video shorts reels tiktok captions text-to-speech offline windows</tags>
+    <projectSourceUrl>https://github.com/techygeekshome/ShortGeek</projectSourceUrl>
+    <packageSourceUrl>https://github.com/techygeekshome/ShortGeek</packageSourceUrl>
+    <docsUrl>https://techygeekshome.info/shortgeek/</docsUrl>
+    <bugTrackerUrl>https://github.com/techygeekshome/ShortGeek/issues</bugTrackerUrl>
+  </metadata>
+</package>
