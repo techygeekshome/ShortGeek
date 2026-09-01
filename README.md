@@ -1,6 +1,23 @@
+<div align="center">
+
+<img src="icons/shortgeek-256.png" alt="ShortGeek logo" width="96" height="96">
+
 # ShortGeek
 
-Turns a guide into a vertical short, on your own machine.
+**Turn a guide, an RSS feed or a bare idea into a narrated, captioned vertical short. Rendered on your own machine.**
+
+[![Build](https://github.com/techygeekshome/ShortGeek/actions/workflows/build-windows.yml/badge.svg)](https://github.com/techygeekshome/ShortGeek/actions/workflows/build-windows.yml)
+[![Version](https://img.shields.io/github/v/release/techygeekshome/ShortGeek?label=version&color=4c9bff)](https://github.com/techygeekshome/ShortGeek/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078d4)](#download)
+[![License](https://img.shields.io/badge/License-proprietary%20freeware-b7791f)](LICENSE)
+[![Made by TechyGeeksHome](https://img.shields.io/badge/made%20by-TechyGeeksHome-b191f2)](https://techygeekshome.info)
+[![Support on Ko-fi](https://img.shields.io/badge/support-Ko--fi-ff5e5b)](https://ko-fi.com/techygeekshome)
+
+[Download](#download) · [What it does](#what-it-does) · [Where the pictures come from](#where-the-pictures-come-from) · [Voices](#voices) · [Requirements](#requirements)
+
+</div>
+
+---
 
 Point ShortGeek at one of your own articles, any RSS feed or article URL, or just a one line idea.
 It drafts a script, narrates it, burns in word by word captions, and renders a 1080x1920 MP4 ready
@@ -8,6 +25,17 @@ to upload to TikTok, YouTube Shorts or Reels. No stock footage, no AI generated 
 subscription.
 
 Part of the [TechyGeeksHome](https://techygeekshome.info/geek-tools/) range.
+
+---
+
+## Download
+
+**[Download the latest release](https://github.com/techygeekshome/ShortGeek/releases/latest)**, or read about it on the
+**[ShortGeek product page](https://techygeekshome.info/shortgeek/)**.
+
+Windows 10 or 11, 64-bit. Nothing else to install.
+
+---
 
 ## What it does
 
@@ -18,6 +46,8 @@ Part of the [TechyGeeksHome](https://techygeekshome.info/geek-tools/) range.
 - Eight built in backgrounds, or drop in your own MP4 loops
 - Renders to 1080x1920 H.264 MP4 and keeps a library of everything you have made
 - Queue several at once and let them render back to back
+
+---
 
 ## Where the pictures come from
 
@@ -35,6 +65,8 @@ rather than stretched. Gameplay footage goes here, recorded by you or licensed f
 
 Nothing is AI generated and nothing is somebody else's footage passed off as yours.
 
+---
+
 ## What it will not do
 
 - **It does not invent facts.** Every line comes from the source text. The optional AI polish pass
@@ -46,11 +78,15 @@ Nothing is AI generated and nothing is somebody else's footage passed off as you
 - **It does not send your work anywhere.** Everything renders on this machine. The only outbound
   calls are to the voice service, and to a paid AI provider if you choose to add your own key.
 
+---
+
 ## Voices
 
 Microsoft Edge's free neural voices are the default and need no signup. If that endpoint is
 unreachable, ShortGeek falls back to the offline eSpeak NG voice and says so in the render queue.
 ElevenLabs works too if you add your own API key and voice ID in Settings.
+
+---
 
 ## Optional AI polish
 
@@ -59,10 +95,14 @@ want the lines reworded to sound more spoken, add your own Anthropic or OpenAI k
 Same facts, same structure, only the wording changes. Leave the provider as None and everything
 still works.
 
+---
+
 ## Requirements
 
 Windows 10 version 1809 or later, 64-bit. The installer bundles Python and ffmpeg, so there is
 nothing to install first.
+
+---
 
 ## Running from source
 
@@ -73,9 +113,13 @@ run.bat
 The first run creates a virtual environment and installs the dependencies. On macOS or Linux use
 `./run.sh` and install ffmpeg yourself first.
 
+---
+
 ## Fonts
 
 Roboto, Apache-2.0, in `assets/fonts/`. DejaVu Sans Mono is used for code cards.
+
+---
 
 ## Licence
 
