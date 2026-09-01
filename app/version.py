@@ -8,13 +8,22 @@ The app was called Shorts Studio up to 1.12.0 and was never released publicly.
 Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
 older entries are kept below because the fixes in them are real."""
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 
 # Shown on the About page. Kept here so there is one place to change it if the
 # licence ever changes.
 APP_LICENCE = "Freeware"
 
 CHANGELOG = [
+    {
+        "version": "1.0.1",
+        "notes": [
+            "Fixed the app opening on a page saying the connection was refused. The build was leaving out the code that serves the screens, so there was nothing there to open. Nothing was wrong with your machine.",
+            "If the app ever fails to start again it now says so, in a window, and writes the details to a file you can send in, instead of leaving the browser to report a refused connection.",
+            "Added the application icon, which the 1.0.0 build shipped without.",
+            "The build now starts the packaged app and asks it for a page before an installer is made, which is the check that would have caught all of this.",
+        ],
+    },
     {
         "version": "1.0.0",
         "notes": [
