@@ -133,7 +133,10 @@ def _show_startup_failure(failure: list[str]) -> None:
             return
         except Exception:
             pass
-    print(body, file=sys.stderr)
+    try:
+        print(body, file=sys.stderr or sys.stdout)
+    except Exception:
+        pass
 
 
 def _crash_log_path() -> Path:
@@ -142,7 +145,42 @@ def _crash_log_path() -> Path:
     return root / "TechyGeeksHome" / APP_NAME / "startup-error.txt"
 
 
+def _give_the_process_somewhere_to_write() -> None:
+    """A windowed build has no console, so Python starts with sys.stdout and sys.stderr set to
+    None. Anything that touches them then fails, and it fails in places nobody expects: uvicorn's
+    log formatter asks stdout whether it is a terminal and dies on the first line of
+    "AttributeError: 'NoneType' object has no attribute 'isatty'", taking the server thread with
+    it and leaving the window with nothing to show.
+
+    So before anything else runs, both are pointed at a log file under the user's own profile.
+    A file rather than a null sink, because the next time something goes wrong in here the output
+    is the only evidence there will be."""
+    if sys.stdout is not None and sys.stderr is not None:
+        return
+
+    try:
+        path = _crash_log_path().with_name("output.txt")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        sink = open(path, "w", encoding="utf-8", errors="replace", buffering=1)
+    except Exception:
+        sink = open(os.devnull, "w")
+
+    if sys.stdout is None:
+        sys.stdout = sink
+    if sys.stderr is None:
+        sys.stderr = sink
+
+
 def main() -> int:
+    # A windowed build starts with no standard streams at all. That is impossible to reproduce
+    # reliably from a build agent, which always has a console to inherit, and the first attempt at
+    # a build check hid the fault by redirecting the streams to files. So the condition is made to
+    # happen on demand instead, and the check runs the packaged app under it.
+    if os.environ.get("SHORTGEEK_NO_STREAMS"):
+        sys.stdout = None  # type: ignore[assignment]
+        sys.stderr = None  # type: ignore[assignment]
+
+    _give_the_process_somewhere_to_write()
     _silence_console_windows()
     _silence_proactor_reset()
     _add_bundled_ffmpeg_to_path()
@@ -167,7 +205,8 @@ def main() -> int:
 
     def _serve():
         try:
-            uvicorn.run(asgi_app, host="127.0.0.1", port=port, log_level="warning")
+            uvicorn.run(asgi_app, host="127.0.0.1", port=port, log_level="warning",
+                        log_config=None)
         except Exception:
             failure.append(traceback.format_exc())
 
