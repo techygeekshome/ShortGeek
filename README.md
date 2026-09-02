@@ -82,8 +82,14 @@ Nothing is AI generated and nothing is somebody else's footage passed off as you
 
 ## Voices
 
-Microsoft Edge's free neural voices are the default and need no signup. If that endpoint is
-unreachable, ShortGeek falls back to the offline eSpeak NG voice and says so in the render queue.
+Microsoft Edge's free neural voices are the default and need no signup. They give real word
+boundaries, which is what the word level captions are timed from.
+
+If that endpoint is unreachable, ShortGeek falls back to a proper offline neural voice (Kokoro,
+Emma by default) and says so in the render queue. The offline voice downloads once, about 120MB,
+and after that it works with no connection at all. Captions on the offline voice are timed per
+sentence rather than per word, because the offline model does not report word boundaries.
+
 ElevenLabs works too if you add your own API key and voice ID in Settings.
 
 ---
