@@ -39,6 +39,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 VersionInfoVersion={#MyAppVersion}
 VersionInfoCompany={#MyPublisher}
 VersionInfoProductName={#MyAppName}
+VersionInfoDescription={#MyAppName} installer
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
