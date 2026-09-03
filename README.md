@@ -47,6 +47,33 @@ Windows 10 or 11, 64-bit. Nothing else to install.
 - Renders to 1080x1920 H.264 MP4 and keeps a library of everything you have made
 - Queue several at once and let them render back to back
 
+
+## Screenshots
+
+**New short** — pick a source, review the script, choose a voice and a look.
+
+<img src="docs/screenshots/02-new-short.png" alt="The New Short screen" width="820">
+
+**Script** — hook, beats and call to action, all editable before anything renders.
+
+<img src="docs/screenshots/06-script.png" alt="A drafted script" width="820">
+
+**Render** — the queue runs on this machine, start to finish.
+
+<img src="docs/screenshots/07-render-queue.png" alt="The render queue, finished" width="820">
+
+**Library** — everything rendered, newest first.
+
+<img src="docs/screenshots/03-library.png" alt="The Library screen with a rendered short" width="820">
+
+**Backgrounds** — the built-in looks, plus any clips of your own.
+
+<img src="docs/screenshots/08-backgrounds.png" alt="The Backgrounds screen" width="820">
+
+**Settings** — brand, voice and the optional script polish.
+
+<img src="docs/screenshots/04-settings.png" alt="The Settings screen" width="820">
+
 ---
 
 ## Where the pictures come from
