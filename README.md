@@ -19,6 +19,14 @@
 
 ---
 
+## 🎬 See it in action
+
+[![ShortGeek demo video](https://img.youtube.com/vi/zFTy2RzFx0M/maxresdefault.jpg)](https://www.youtube.com/watch?v=zFTy2RzFx0M)
+
+An article turned into a narrated short, in under a minute.
+
+---
+
 Point ShortGeek at one of your own articles, any RSS feed or article URL, or just a one line idea.
 It drafts a script, narrates it, burns in word by word captions, and renders a 1080x1920 MP4 ready
 to upload to TikTok, YouTube Shorts or Reels. No stock footage, no AI generated imagery, no
