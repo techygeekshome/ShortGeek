@@ -2,9 +2,6 @@
 // app stays as easy to tinker with as the mockup it was built from.
 
 const state = {
-  sourceTab: "guide",
-  selectedGuideId: null,
-  selectedUrl: null,
   currentScript: null,
   voiceEngine: "edge",
   captionStyle: "bold_highlight",
@@ -43,14 +40,7 @@ function switchView(view) {
 // changes.
 function resetNewShortForm() {
   state.currentScript = null;
-  state.selectedGuideId = null;
-  state.selectedUrl = null;
-  $("#topicInput").value = "";
   $("#pasteInput").value = "";
-  $("#rssUrl").value = "";
-  $("#rssList").innerHTML = "";
-  $("#guideSearch").value = "";
-  $$("#guideList .guide-item").forEach((el) => el.classList.remove("selected"));
   $("#hookField").value = "";
   $("#ctaField").value = "";
   $("#beatsList").innerHTML = "";
@@ -82,90 +72,60 @@ function initClearButton() {
   });
 }
 
-// ------------------------------------------------------------------ source
-
-function switchSourceTab(tab) {
-  state.sourceTab = tab;
-  $$("#sourceTabs .tab").forEach((el) => el.classList.toggle("active", el.dataset.src === tab));
-  $$(".src-pane").forEach((el) => el.classList.toggle("hidden", el.dataset.pane !== tab));
-}
-
-function initSourceTabs() {
-  $$("#sourceTabs .tab").forEach((el) => el.addEventListener("click", () => switchSourceTab(el.dataset.src)));
-}
-
-async function loadGuides(query = "") {
-  const list = $("#guideList");
-  list.innerHTML = '<div class="hint">Loading…</div>';
-  try {
-    const data = await jsonFetch(`/api/guides?search=${encodeURIComponent(query)}&per_page=20`);
-    if (!data.items.length) {
-      list.innerHTML = `<div class="hint">${escapeHtml(data.notice || "No guides found.")}</div>`;
-      return;
-    }
-    list.innerHTML = "";
-    data.items.forEach((g) => {
-      const row = document.createElement("div");
-      row.className = "guide-item";
-      row.innerHTML = `<div class="g-title">${escapeHtml(g.title)}</div><div class="g-meta">Guide</div>`;
-      row.addEventListener("click", () => {
-        state.selectedGuideId = g.id;
-        $$("#guideList .guide-item").forEach((el) => el.classList.remove("selected"));
-        row.classList.add("selected");
-      });
-      list.appendChild(row);
-    });
-  } catch (e) {
-    list.innerHTML = `<div class="hint">Couldn't load guides: ${escapeHtml(e.message)}</div>`;
-  }
-}
-
-async function fetchRss() {
-  const url = $("#rssUrl").value.trim();
-  const list = $("#rssList");
-  if (!url) return;
-  list.innerHTML = '<div class="hint">Fetching…</div>';
-  try {
-    const data = await jsonFetch("/api/rss/list", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ feed_url: url }),
-    });
-    if (data.items && data.items.length) {
-      list.innerHTML = "";
-      data.items.forEach((it) => {
-        const row = document.createElement("div");
-        row.className = "guide-item";
-        row.innerHTML = `<div class="g-title">${escapeHtml(it.title)}</div><div class="g-meta">Feed item</div>`;
-        row.addEventListener("click", () => {
-          state.selectedUrl = it.link;
-          $$("#rssList .guide-item").forEach((el) => el.classList.remove("selected"));
-          row.classList.add("selected");
-        });
-        list.appendChild(row);
-      });
-      return;
-    }
-    throw new Error("empty feed");
-  } catch (e) {
-    // Not a feed (or empty) -- treat the input as a direct page URL.
-    list.innerHTML = "";
-    const row = document.createElement("div");
-    row.className = "guide-item selected";
-    row.innerHTML = `<div class="g-title">Use this page directly</div><div class="g-meta">${escapeHtml(url)}</div>`;
-    list.appendChild(row);
-    state.selectedUrl = url;
-  }
-}
-
 // ------------------------------------------------------------------ script
 
 function beatTag(beat) {
-  // Screenshot cards were dropped from the render (illegible at 9:16 phone
-  // size) -- every beat now renders as a code card or a bold text callout,
-  // regardless of whether the source step had an image.
   if (beat.is_code) return "💻 Code / command";
+  if (beat.image_url) return "🖼️ Text + screenshot";
   return "📝 Text callout";
+}
+
+// Uploads a screenshot for one beat and stores the returned local reference
+// on that beat -- never a URL, never sent anywhere except to this app's own
+// local server. Re-renders just that row's thumbnail once it's back.
+async function attachBeatImage(idx, file) {
+  const row = $(`#beatsList .beat-row[data-idx="${idx}"]`);
+  const shotArea = row.querySelector(".beat-shot");
+  shotArea.innerHTML = '<div class="hint">Uploading…</div>';
+  try {
+    const form = new FormData();
+    form.append("file", file);
+    const resp = await fetch("/api/beat-image/upload", { method: "POST", body: form });
+    if (!resp.ok) {
+      let detail = resp.statusText;
+      try { detail = (await resp.json()).detail || detail; } catch (_) {}
+      throw new Error(detail);
+    }
+    const data = await resp.json();
+    state.currentScript.beats[idx].image_url = data.image_ref;
+    renderBeatShot(idx, data.preview_url);
+    row.querySelector(".beat-tag").textContent = beatTag(state.currentScript.beats[idx]);
+  } catch (e) {
+    shotArea.innerHTML = `<div class="hint">Couldn't attach that image: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function removeBeatImage(idx) {
+  state.currentScript.beats[idx].image_url = null;
+  renderBeatShot(idx, null);
+  const row = $(`#beatsList .beat-row[data-idx="${idx}"]`);
+  row.querySelector(".beat-tag").textContent = beatTag(state.currentScript.beats[idx]);
+}
+
+function renderBeatShot(idx, previewUrl) {
+  const shotArea = $(`#beatsList .beat-row[data-idx="${idx}"] .beat-shot`);
+  if (!shotArea) return;
+  if (previewUrl) {
+    shotArea.innerHTML = `
+      <img src="${previewUrl}" alt="Attached screenshot" class="beat-shot-thumb" />
+      <a href="#" class="beat-shot-remove" data-idx="${idx}">Remove screenshot</a>`;
+  } else {
+    shotArea.innerHTML = `
+      <label class="btn-ghost beat-shot-attach">
+        📎 Attach a small screenshot
+        <input type="file" accept="image/png,image/jpeg,image/webp" data-idx="${idx}" style="display:none;">
+      </label>`;
+  }
 }
 
 function renderScriptEditor(script) {
@@ -177,14 +137,15 @@ function renderScriptEditor(script) {
   script.beats.forEach((b, i) => {
     const row = document.createElement("div");
     row.className = "beat-row";
+    row.dataset.idx = i;
     const codeNote = b.is_code
       ? `<div class="hint" style="margin:4px 0 0;">On screen: <code>${escapeHtml((b.code_display || "").slice(0, 70))}${(b.code_display || "").length > 70 ? "…" : ""}</code></div>`
       : "";
-    row.innerHTML = `<span class="beat-tag">${beatTag(b)}</span><textarea data-idx="${i}" rows="2">${escapeHtml(b.text)}</textarea>${codeNote}`;
+    row.innerHTML = `<span class="beat-tag">${beatTag(b)}</span><textarea data-idx="${i}" rows="2">${escapeHtml(b.text)}</textarea>${codeNote}<div class="beat-shot"></div>`;
     beatsList.appendChild(row);
+    if (!b.is_code) renderBeatShot(i, b.image_url ? `/api/beat-image/${String(b.image_url).replace("beatimg://", "")}` : null);
   });
   $("#durationPill").textContent = `≈ ${Math.round(script.estimated_seconds || estimateSeconds(script))} sec`;
-  $("#llmPill").style.display = script.used_llm ? "inline-block" : "none";
   $("#scriptEmpty").classList.add("hidden");
   $("#scriptEditor").classList.remove("hidden");
   $("#generateBtn").disabled = false;
@@ -195,11 +156,10 @@ function estimateSeconds(script) {
   return words / 2.5;
 }
 
-// Generic on purpose -- mirrors app/scripting/writer.py's _CTA_POOL. The
-// Topic Prompt / Guide / RSS sources all get theirs from the backend
-// already; the Paste Script tab is built entirely client-side, so it needs
-// its own pick. Seeded off the pasted text so the same paste always lands
-// on the same line rather than reshuffling every time you re-draft it.
+// Generic on purpose -- no brand handle, no "full guide linked in bio" claim
+// that might not be true for every script. Seeded off the pasted text so the
+// same paste always lands on the same line rather than reshuffling every
+// time you re-draft it.
 const CTA_POOL = ["Follow for more.", "Follow for more like this.", "Follow along for more."];
 
 function pickCta(seedText) {
@@ -227,50 +187,24 @@ async function draftScript() {
   btn.disabled = true;
   btn.textContent = "Drafting…";
   try {
-    if (state.sourceTab === "paste") {
-      const raw = $("#pasteInput").value.trim();
-      if (!raw) throw new Error("Paste some script text first.");
-      let lines = raw.split(/\n+/).map((l) => l.trim()).filter(Boolean);
-      if (lines.length < 2) {
-        // No line breaks in what was pasted (a single paragraph of prose,
-        // sentences separated by periods rather than actual newlines).
-        // The old behaviour here used the one and only "line" as both the
-        // hook AND the entire beat text -- the whole script ended up
-        // spoken twice, once with no card (as the hook) and once inside
-        // one giant card (as beat 1). Split on sentence boundaries instead,
-        // same as the Topic Prompt tab does, so a pasted paragraph turns
-        // into a real hook + separate beats like it should.
-        lines = (raw.match(/[^.!?]+[.!?]+(?:\s+|$)/g) || [raw]).map((s) => s.trim()).filter(Boolean);
-      }
-      const script = {
-        hook: lines[0] || raw.slice(0, 80),
-        beats: lines.length > 1 ? lines.slice(1).map((t) => ({ text: t, image_url: null, is_code: false })) : [{ text: "Here's what you need to know.", image_url: null, is_code: false }],
-        cta: pickCta(raw),
-        source_title: lines[0] || "Pasted script",
-        used_llm: false,
-      };
-      script.estimated_seconds = estimateSeconds(script);
-      renderScriptEditor(script);
-      return;
+    const raw = $("#pasteInput").value.trim();
+    if (!raw) throw new Error("Write or paste a script first.");
+    let lines = raw.split(/\n+/).map((l) => l.trim()).filter(Boolean);
+    if (lines.length < 2) {
+      // No line breaks in what was pasted (a single paragraph of prose,
+      // sentences separated by periods rather than actual newlines). Split
+      // on sentence boundaries instead, so a pasted paragraph turns into a
+      // real hook + separate beats like it should, rather than the whole
+      // thing getting spoken twice (once as the hook, once as one giant beat).
+      lines = (raw.match(/[^.!?]+[.!?]+(?:\s+|$)/g) || [raw]).map((s) => s.trim()).filter(Boolean);
     }
-
-    let body;
-    if (state.sourceTab === "guide") {
-      if (!state.selectedGuideId) throw new Error("Pick a guide from the list first.");
-      body = { source_type: "guide", guide_id: state.selectedGuideId };
-    } else if (state.sourceTab === "rss_url") {
-      if (!state.selectedUrl) throw new Error("Fetch a feed/URL and pick an item first.");
-      body = { source_type: "url", url: state.selectedUrl };
-    } else if (state.sourceTab === "topic") {
-      const topic = $("#topicInput").value.trim();
-      if (!topic) throw new Error("Type a topic first.");
-      body = { source_type: "topic", topic };
-    }
-    const script = await jsonFetch("/api/script/draft", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const script = {
+      hook: lines[0] || raw.slice(0, 80),
+      beats: lines.length > 1 ? lines.slice(1).map((t) => ({ text: t, image_url: null, is_code: false })) : [{ text: "Here's what you need to know.", image_url: null, is_code: false }],
+      cta: pickCta(raw),
+      source_title: lines[0] || "Pasted script",
+    };
+    script.estimated_seconds = estimateSeconds(script);
     renderScriptEditor(script);
   } catch (e) {
     showGenError(e.message);
@@ -537,13 +471,10 @@ async function loadLibrary() {
 
 async function loadSettings() {
   const cfg = await jsonFetch("/api/settings");
-  $("#set_site_url").value = cfg.site_url || "";
   $("#set_brand_handle").value = cfg.brand_handle || "";
   $("#set_logo_letters").value = cfg.logo_letters || "";
   $("#set_edge_voice").value = cfg.edge_voice || "";
   $("#set_elevenlabs_voice_id").value = cfg.elevenlabs_voice_id || "";
-  $("#set_llm_provider").value = cfg.llm_provider || "none";
-  $("#set_brand_style_notes").value = cfg.brand_style_notes || "";
   // The sidebar shows the APP's identity, not the user's. Their brand goes on the
   // end card of the videos, which is set under Settings and previewed there.
   // Secret fields intentionally left blank -- see saveSettings().
@@ -551,18 +482,13 @@ async function loadSettings() {
 
 async function saveSettings() {
   const patch = {
-    site_url: $("#set_site_url").value.trim(),
     brand_handle: $("#set_brand_handle").value.trim(),
     logo_letters: $("#set_logo_letters").value.trim(),
     edge_voice: $("#set_edge_voice").value.trim(),
     elevenlabs_voice_id: $("#set_elevenlabs_voice_id").value.trim(),
-    llm_provider: $("#set_llm_provider").value,
-    brand_style_notes: $("#set_brand_style_notes").value,
   };
   const ev = $("#set_elevenlabs_api_key").value.trim();
-  const lk = $("#set_llm_api_key").value.trim();
   if (ev) patch.elevenlabs_api_key = ev;
-  if (lk) patch.llm_api_key = lk;
 
   await jsonFetch("/api/settings", {
     method: "POST",
@@ -582,19 +508,11 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-let guideSearchTimer = null;
-
 function init() {
   initNav();
-  initSourceTabs();
   initStylePickers();
   initClearButton();
 
-  $("#guideSearch").addEventListener("input", (e) => {
-    clearTimeout(guideSearchTimer);
-    guideSearchTimer = setTimeout(() => loadGuides(e.target.value.trim()), 350);
-  });
-  $("#rssFetchBtn").addEventListener("click", fetchRss);
   $("#draftBtn").addEventListener("click", draftScript);
   $("#generateBtn").addEventListener("click", generateShort);
   $("#saveSettingsBtn").addEventListener("click", saveSettings);
@@ -605,9 +523,24 @@ function init() {
     e.target.value = "";
   });
 
+  // Delegated so it works for rows the editor injects after this runs once.
+  $("#beatsList").addEventListener("change", (e) => {
+    if (e.target.matches('input[type="file"][data-idx]')) {
+      const file = e.target.files[0];
+      const idx = parseInt(e.target.dataset.idx, 10);
+      if (file) attachBeatImage(idx, file);
+    }
+  });
+  $("#beatsList").addEventListener("click", (e) => {
+    const link = e.target.closest(".beat-shot-remove");
+    if (link) {
+      e.preventDefault();
+      removeBeatImage(parseInt(link.dataset.idx, 10));
+    }
+  });
+
   initChrome();
 
-  loadGuides();
   loadSettings();
   loadLibrary();
   loadCustomBackgrounds();
@@ -685,7 +618,7 @@ async function saveFirstRun(skip) {
     const handle = $("#fr_brand_handle").value.trim();
     const letters = $("#fr_logo_letters").value.trim();
     if (name) patch.brand_name = name;
-    if (handle) { patch.brand_handle = handle; patch.site_url = handle.startsWith("http") ? handle : "https://" + handle; }
+    if (handle) patch.brand_handle = handle;
     if (letters) patch.logo_letters = letters.toUpperCase();
   }
   try {
