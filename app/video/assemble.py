@@ -64,15 +64,16 @@ def _beat_span(word_list: List[WordTiming], fallback_start: float, min_dur: floa
 
 
 def _build_beat_card(beat, index: int, work_dir: Path) -> tuple[str, int, int]:
-    # Real screenshots were dropped from the visual pipeline: source images
-    # are desktop-scale UI captures, and no amount of on-screen sizing makes
-    # their text legible on a 9:16 clip at phone-viewing distance. Every
-    # beat now gets the same legible treatment instead -- a code card for
-    # code/commands, a bold numbered text callout for everything else.
+    # Code/commands always get the editor-styled card. Everything else gets
+    # the numbered beat card -- with a small framed screenshot inset on top
+    # of the text when one's been attached to that beat (never full-bleed:
+    # a desktop-scale capture stops being legible at 9:16 phone-viewing size
+    # once it fills the frame, so it's sized to sit *inside* the card instead).
     out_path = str(work_dir / f"card_{index}.png")
     if beat.is_code:
         return cards.render_code_card(beat.code_display or beat.text, out_path)
-    return cards.render_bullet_card(beat.text, index + 1, out_path)
+    image = cards.resolve_image(beat.image_url) if beat.image_url else None
+    return cards.render_beat_card(beat.text, index + 1, out_path, image=image)
 
 
 def render_video(
