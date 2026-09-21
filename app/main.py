@@ -17,14 +17,11 @@ from pydantic import BaseModel
 
 from . import jobs
 from .config import BASE_DIR, CACHE_DIR, LIBRARY_DIR, config
-from .scripting import writer
 from .scripting.writer import Beat, Script
-from .sources import rss_url, topic
-from .sources.wordpress import WordPressSource
 from .tts import router as tts_router
 from .version import APP_LICENCE, APP_VERSION, CHANGELOG
 from .video import assemble
-from .visuals import backgrounds
+from .visuals import backgrounds, cards
 
 app = FastAPI(title="ShortGeek")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "app" / "static")), name="static")
@@ -41,69 +38,37 @@ def index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={"app_version": APP_VERSION})
 
 
-# ---------------------------------------------------------------- sources --
+# ------------------------------------------------------------- beat images -
+# A small screenshot attached to a beat -- e.g. a Windows Key+H popup for a
+# beat about voice typing. Saved to local disk only; never uploaded anywhere,
+# same promise as everything else in this app. Referenced on the beat as
+# "beatimg://<filename>" (see app/visuals/cards.py), not as a real URL.
 
-@app.get("/api/guides")
-def api_guides(search: str = "", per_page: int = 20):
-    cfg = config.all()
-    site = (cfg.get("site_url") or "").strip()
-    # My Guides reads a WordPress site's public REST API. Until the user has told
-    # us which site is theirs there is nothing to read, so say that plainly rather
-    # than building a broken URL and reporting a connection error for it.
-    if not site:
-        return {
-            "items": [],
-            "notice": "Set your site address under Settings to pull in your own guides. "
-                      "The other three source tabs work without it.",
-        }
-    src = WordPressSource(site)
+_ALLOWED_IMAGE_TYPES = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}
+_MAX_BEAT_IMAGE_BYTES = 8 * 1024 * 1024
+
+
+@app.post("/api/beat-image/upload")
+async def api_beat_image_upload(file: UploadFile = File(...)):
+    suffix = _ALLOWED_IMAGE_TYPES.get(file.content_type or "")
+    if not suffix:
+        raise HTTPException(400, "Only PNG, JPEG or WEBP screenshots are supported.")
+    data = await file.read()
+    if len(data) > _MAX_BEAT_IMAGE_BYTES:
+        raise HTTPException(400, "That image is larger than 8 MB -- crop it down and try again.")
     try:
-        return {"items": src.search(search, per_page)}
+        ref = cards.save_beat_image(data, suffix=suffix)
     except Exception as e:
-        raise HTTPException(502, f"Couldn't reach {site}: {e}")
+        raise HTTPException(400, f"Couldn't read that image: {e}")
+    return {"ok": True, "image_ref": ref, "preview_url": f"/api/beat-image/{ref.split('://', 1)[1]}"}
 
 
-class RssListIn(BaseModel):
-    feed_url: str
-
-
-@app.post("/api/rss/list")
-def api_rss_list(body: RssListIn):
-    try:
-        return {"items": rss_url.list_feed(body.feed_url)}
-    except Exception as e:
-        raise HTTPException(502, f"Couldn't read that feed: {e}")
-
-
-# ------------------------------------------------------------- script draft -
-
-class DraftRequest(BaseModel):
-    source_type: str  # "guide" | "rss_url" | "url" | "topic"
-    guide_id: Optional[int] = None
-    url: Optional[str] = None
-    topic: Optional[str] = None
-
-
-@app.post("/api/script/draft")
-def api_script_draft(body: DraftRequest):
-    cfg = config.all()
-    if body.source_type == "guide":
-        if not body.guide_id:
-            raise HTTPException(400, "guide_id required")
-        item = WordPressSource(cfg["site_url"]).fetch(body.guide_id)
-    elif body.source_type in ("rss_url", "url"):
-        if not body.url:
-            raise HTTPException(400, "url required")
-        item = rss_url.fetch_url(body.url)
-    elif body.source_type == "topic":
-        if not body.topic:
-            raise HTTPException(400, "topic required")
-        item = topic.make_item(body.topic)
-    else:
-        raise HTTPException(400, f"Unknown source_type: {body.source_type}")
-
-    script = writer.draft_script(item)
-    return writer.script_to_dict(script)
+@app.get("/api/beat-image/{filename}")
+def api_beat_image_get(filename: str):
+    path = cards.beat_image_path(f"beatimg://{filename}")
+    if not path:
+        raise HTTPException(404, "not found")
+    return FileResponse(str(path))
 
 
 # ------------------------------------------------------------------ render -
