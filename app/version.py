@@ -8,7 +8,7 @@ The app was called Shorts Studio up to 1.12.0 and was never released publicly.
 Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
 older entries are kept below because the fixes in them are real."""
 
-APP_VERSION = "1.0.2"
+APP_VERSION = "1.0.0"
 
 # Shown on the About page. Kept here so there is one place to change it if the
 # licence ever changes.
