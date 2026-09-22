@@ -8,13 +8,22 @@ The app was called Shorts Studio up to 1.12.0 and was never released publicly.
 Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
 older entries are kept below because the fixes in them are real."""
 
-APP_VERSION = "1.0.2"
+APP_VERSION = "2.0.0"
 
 # Shown on the About page. Kept here so there is one place to change it if the
 # licence ever changes.
 APP_LICENCE = "Freeware"
 
 CHANGELOG = [
+    {
+        "version": "2.0.0",
+        "notes": [
+            "Removed Topic Prompt and the WordPress/RSS guide import. Neither ever reliably produced a usable script -- topic mode couldn't actually write one, and pulling text from a guide page rarely found clean, usable lines. New Short is now Paste Script only, and this release is about making that one path solid rather than keeping two that didn't work.",
+            "Removed the optional AI script polish step along with it, since Topic Prompt was its only caller.",
+            "Added the ability to attach a screenshot to a beat, for example a Windows Key+H popup. It shows as a small inset in the corner of that beat's card instead of taking over the whole card.",
+            "New card look: dark, near-black cards with a blue accent, replacing the old plain bullet-point cards.",
+        ],
+    },
     {
         "version": "1.0.2",
         "notes": [

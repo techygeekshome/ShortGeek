@@ -35,7 +35,7 @@
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
         <div>
           <div class="screen-title">Create a new short</div>
-          <div class="screen-sub">Pick a source, review the script, choose a voice &amp; look, then render.</div>
+          <div class="screen-sub">Write your script, review the beats, choose a voice &amp; look, then render.</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
           <span id="clearedPill" class="pill" style="display:none;background:#e6f6ea;color:#1a7a3a;">Cleared ✓</span>
@@ -47,49 +47,24 @@
         <div class="left-col">
 
           <div class="step">
-            <div class="step-head"><div class="step-num">1</div><div class="step-title">Pick a source</div></div>
-            <div class="tabs" id="sourceTabs">
-              <div class="tab active" data-src="guide">My Guides</div>
-              <div class="tab" data-src="rss_url">Website / RSS</div>
-              <div class="tab" data-src="topic">Topic Prompt</div>
-              <div class="tab" data-src="paste">Paste Script</div>
-            </div>
-
-            <div class="src-pane" data-pane="guide">
-              <div class="search-row">
-                <input id="guideSearch" class="text-input" placeholder="🔎 Search your guides…" />
-              </div>
-              <div id="guideList" class="guide-list"><div class="hint">Loading guides…</div></div>
-            </div>
-
-            <div class="src-pane hidden" data-pane="rss_url">
-              <input id="rssUrl" class="text-input" placeholder="Paste an RSS feed URL, or any article/page URL…" />
-              <button class="btn-ghost" id="rssFetchBtn" style="margin-top:8px;">Fetch</button>
-              <div id="rssList" class="guide-list" style="margin-top:10px;"></div>
-            </div>
-
-            <div class="src-pane hidden" data-pane="topic">
-              <textarea id="topicInput" class="text-input" rows="2" placeholder="e.g. 3 Windows settings everyone should turn off"></textarea>
-            </div>
-
-            <div class="src-pane hidden" data-pane="paste">
-              <textarea id="pasteInput" class="text-input" rows="5" placeholder="Paste a finished script - first line becomes the hook."></textarea>
-            </div>
+            <div class="step-head"><div class="step-num">1</div><div class="step-title">Write your script</div></div>
+            <div class="fn-note" style="margin:0 0 10px;">Paste (or write) your finished script - first line becomes the hook, each line after that becomes its own beat/screen, and the last line becomes the call to action if it reads like one.</div>
+            <textarea id="pasteInput" class="text-input" rows="6" placeholder="Here's how to fix that annoying Windows 11 setting.&#10;Open Settings and search for the option.&#10;Toggle it off, then restart the app.&#10;Follow for more like this."></textarea>
           </div>
 
           <div class="step">
             <div class="step-head"><div class="step-num">2</div><div class="step-title">Script</div></div>
-            <div id="scriptEmpty" class="hint">Pick a source above, then click "Draft script".</div>
+            <div id="scriptEmpty" class="hint">Write a script above, then click "Draft script".</div>
             <div id="scriptEditor" class="hidden">
               <label class="field-label">Hook</label>
               <textarea id="hookField" class="text-input" rows="2"></textarea>
               <label class="field-label">Beats</label>
+              <div class="fn-note" style="margin:0 0 8px;">Each beat can carry a small screenshot - a Settings dialog, a keyboard-shortcut popup, whatever the line is talking about. It's shown small, framed, above the text, never full-screen.</div>
               <div id="beatsList"></div>
               <label class="field-label">Call to action</label>
               <textarea id="ctaField" class="text-input" rows="1"></textarea>
               <div class="script-meta">
                 <span class="pill" id="durationPill">≈ -- sec</span>
-                <span class="pill" id="llmPill" style="display:none;">AI-polished</span>
               </div>
             </div>
             <button class="btn-ghost" id="draftBtn" style="margin-top:12px;">✏️ Draft script</button>
@@ -114,7 +89,7 @@
 
             <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;">BACKGROUND</div>
             <div class="swatch-row" id="bgSwatches">
-              <div class="swatch selected" data-val="content_pan"><div class="swatch-thumb t8">📷</div><div class="swatch-label">Article Images</div></div>
+              <div class="swatch selected" data-val="content_pan"><div class="swatch-thumb t8">📷</div><div class="swatch-label">Attached Images</div></div>
               <div class="swatch" data-val="gradient_motion"><div class="swatch-thumb t2"></div><div class="swatch-label">Gradient Motion</div></div>
               <div class="swatch" data-val="typing_loop"><div class="swatch-thumb t1"></div><div class="swatch-label">Typing Loop</div></div>
               <div class="swatch" data-val="terminal_scroll"><div class="swatch-thumb t3"></div><div class="swatch-label">Terminal Scroll</div></div>
@@ -127,7 +102,7 @@
             <div class="swatch-row" id="customBgSwatches">
               <div class="hint">Loading…</div>
             </div>
-            <div class="fn-note">"Article Images" pans slowly across the guide's own real screenshots behind each card (falling back to a generated look wherever a beat has no image). Other built-in backgrounds are generated in code, live, frame by frame - or drop your own real video clips into <code>assets/backgrounds/custom/</code> to use those instead. Never AI art, never someone else's footage passed off as yours.</div>
+            <div class="fn-note">"Attached Images" pans slowly across whatever screenshots you've attached to your beats, behind each card (falling back to a generated look wherever a beat has none). Other built-in backgrounds are generated in code, live, frame by frame - or drop your own real video clips into <code>assets/backgrounds/custom/</code> to use those instead. Never AI art, never someone else's footage passed off as yours.</div>
           </div>
 
           <button class="generate-btn" id="generateBtn" disabled>⚡ Generate Short</button>
@@ -177,7 +152,7 @@
     <!-- ============ ABOUT VIEW ============ -->
     <section id="view-about" class="view">
       <div class="screen-title">About</div>
-      <div class="screen-sub" id="aboutStatus">ShortGeek turns a guide, a feed or a topic into a narrated, captioned vertical short.</div>
+      <div class="screen-sub" id="aboutStatus">ShortGeek turns a script you write into a narrated, captioned vertical short.</div>
 
       <div class="step">
         <div class="step-head"><div class="step-title">ShortGeek</div></div>
@@ -190,15 +165,16 @@
         </dl>
 
         <h4>What it does</h4>
-        <p>Takes one of your guides, any RSS feed or URL, or a bare topic, and builds a
-          narrated, captioned 1080x1920 short from it. The script, the voice, the captions
-          and the visuals are all produced on this computer.</p>
+        <p>Takes a script you write or paste in and builds a narrated, captioned 1080x1920
+          short from it, with a small framed screenshot on any beat you attach one to.
+          The voice, the captions and the visuals are all produced on this computer.</p>
 
         <h4>What it will not do</h4>
-        <p>No account and no sign-up. It never uploads your videos and it never posts on
-          your behalf. There is no telemetry. It makes no outbound call at all unless you
-          press Check for updates, or you have explicitly configured a voice or AI key of
-          your own, and then only for that feature.</p>
+        <p>No account and no sign-up. It never uploads your videos, your script or any
+          screenshot you attach, and it never posts on your behalf. There is no telemetry.
+          It makes no outbound call at all unless you press Check for updates, use the free
+          Edge voice, or have explicitly configured your own ElevenLabs key - and then only
+          for that feature.</p>
 
         <div class="linkrow">
           <button class="btn-ghost" data-open="https://techygeekshome.info/shortgeek/">Product page</button>
@@ -221,8 +197,6 @@
 
       <div class="step">
         <div class="step-head"><div class="step-title">Brand</div></div>
-        <label class="field-label">Site URL (used for the "My Guides" source)</label>
-        <input id="set_site_url" class="text-input" />
         <label class="field-label">Brand handle (shown in the watermark &amp; CTA line)</label>
         <input id="set_brand_handle" class="text-input" />
         <label class="field-label">Logo letters (watermark badge)</label>
@@ -237,20 +211,6 @@
         <input id="set_elevenlabs_api_key" class="text-input" type="password" />
         <label class="field-label">ElevenLabs voice ID (optional)</label>
         <input id="set_elevenlabs_voice_id" class="text-input" />
-      </div>
-
-      <div class="step">
-        <div class="step-head"><div class="step-title">Script AI polish (optional)</div></div>
-        <label class="field-label">Provider</label>
-        <select id="set_llm_provider" class="text-input">
-          <option value="none">None - heuristic script only (no key needed)</option>
-          <option value="anthropic">Anthropic (Claude)</option>
-          <option value="openai">OpenAI</option>
-        </select>
-        <label class="field-label">API key</label>
-        <input id="set_llm_api_key" class="text-input" type="password" />
-        <label class="field-label">Brand style notes</label>
-        <textarea id="set_brand_style_notes" class="text-input" rows="2"></textarea>
       </div>
 
       <button class="btn-ghost" id="saveSettingsBtn">💾 Save settings</button>
@@ -301,7 +261,7 @@
     </div>
     <div class="mb">
       <h4>Something not working</h4>
-      <p>Open an issue on GitHub. Say what source you used, what you expected and what you
+      <p>Open an issue on GitHub. Say what you pasted, what you expected and what you
         got. Issues are read by a person, not a bot.</p>
 
       <h4>The voice failed, or sounds robotic</h4>
@@ -310,8 +270,9 @@
         and you will always have a working voice, even when Edge has a bad day.</p>
 
       <h4>Rendering fails</h4>
-      <p>Check the queue panel for the error text. Almost every render failure is either a
-        source that returned no usable text, or a background clip the encoder could not read.</p>
+      <p>Check the queue panel for the error text. Almost every render failure is either an
+        empty beat, an attached screenshot the encoder couldn't read, or a background clip
+        the encoder couldn't read.</p>
 
       <div class="linkrow">
         <button class="btn-ghost" data-open="https://github.com/techygeekshome/ShortGeek/issues/new">Open an issue</button>

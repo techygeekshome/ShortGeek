@@ -50,7 +50,6 @@ DEFAULTS: Dict[str, Any] = {
     "brand_configured": False,
     "brand_name": "My Channel",
     "brand_handle": "",
-    "site_url": "",
     "logo_letters": "MC",
     # Voice
     "voice_engine": "edge",          # "edge" | "espeak" | "elevenlabs"
@@ -58,13 +57,9 @@ DEFAULTS: Dict[str, Any] = {
     "espeak_voice": "en-gb",
     "elevenlabs_api_key": "",
     "elevenlabs_voice_id": "",
-    # Script writing
-    "llm_provider": "none",           # "none" | "anthropic" | "openai"
-    "llm_api_key": "",
-    "brand_style_notes": "Friendly, plain-English, no hype, no clickbait exaggeration.",
     # Visual defaults
     "caption_style": "bold_highlight",  # "bold_highlight" | "minimal" | "classic_subtitle"
-    "background_style": "content_pan",  # article: content_pan (real per-beat images, panned)
+    "background_style": "content_pan",  # attached: content_pan (real per-beat screenshots, panned)
                                           # still: gradient_motion | typing_loop | terminal_scroll | clean_light
                                           # motion: code_rain | bounce_orbit | sort_visualizer
                                           # yours: custom:<filename.mp4> | custom_random
@@ -123,7 +118,7 @@ class Config:
     # back into logs/exceptions).
     def public(self) -> Dict[str, Any]:
         d = self.all()
-        for secret_key in ("elevenlabs_api_key", "llm_api_key"):
+        for secret_key in ("elevenlabs_api_key",):
             if d.get(secret_key):
                 d[secret_key] = "•" * 8
         return d

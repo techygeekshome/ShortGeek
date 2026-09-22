@@ -80,6 +80,12 @@ body{margin:0;background:var(--bg);font-family:var(--ui-font);color:var(--text);
 .beat-row textarea{width:100%;border:none;background:transparent;font-family:inherit;font-size:12.5px;resize:vertical;padding:0;color:var(--text);}
 .beat-row textarea:focus{outline:none;}
 
+.beat-shot{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.beat-shot-attach{padding:6px 11px;font-size:11px;}
+.beat-shot-thumb{max-width:120px;max-height:80px;border-radius:6px;border:1px solid var(--border);object-fit:contain;background:#000;}
+.beat-shot-remove{font-size:11px;color:var(--muted-2);text-decoration:none;}
+.beat-shot-remove:hover{color:var(--danger);}
+
 .script-meta{display:flex;gap:8px;align-items:center;margin-top:10px;}
 .pill{background:var(--panel2);border-radius:20px;padding:4px 10px;font-size:10.5px;font-weight:600;color:var(--muted);}
 .btn-ghost{border:1px solid var(--border);background:var(--panel);border-radius:var(--radius);padding:8px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;}
