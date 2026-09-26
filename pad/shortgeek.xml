@@ -30,24 +30,24 @@
   </Company_Info>
   <Program_Info>
     <Program_Name>ShortGeek</Program_Name>
-    <Program_Version>1.0.2</Program_Version>
+    <Program_Version>2.0.1</Program_Version>
     <Program_Release_Month>09</Program_Release_Month>
-    <Program_Release_Day>01</Program_Release_Day>
+    <Program_Release_Day>26</Program_Release_Day>
     <Program_Release_Year>2026</Program_Release_Year>
     <Program_Cost_Dollars>0</Program_Cost_Dollars>
     <Program_Type>Freeware</Program_Type>
-    <Program_Release_Status>New Release</Program_Release_Status>
+    <Program_Release_Status>Major Update</Program_Release_Status>
     <Program_Install_Support>Install and Uninstall</Program_Install_Support>
     <Program_OS_Support>Win10,Win11</Program_OS_Support>
     <Program_Language>English</Program_Language>
-    <Program_Change_Info>First public release.</Program_Change_Info>
+    <Program_Change_Info>2.0 is script-first with a screenshot on any beat. 2.0.1 states on the About screen where narration text goes and links the privacy page.</Program_Change_Info>
     <Program_Specific_Category>Multimedia &amp; Design::Video Editors</Program_Specific_Category>
     <Program_Category_Class>Multimedia &amp; Design</Program_Category_Class>
     <Program_System_Requirements>Windows 10 or 11, 64-bit. Python and ffmpeg are inside the installer, so nothing else is needed.</Program_System_Requirements>
     <File_Info>
-      <File_Size_Bytes>87417315</File_Size_Bytes>
-      <File_Size_K>85368</File_Size_K>
-      <File_Size_MB>83</File_Size_MB>
+      <File_Size_Bytes>93920903</File_Size_Bytes>
+      <File_Size_K>91719</File_Size_K>
+      <File_Size_MB>89</File_Size_MB>
     </File_Info>
     <Expire_Info>
       <Has_Expire_Info>N</Has_Expire_Info>
@@ -55,22 +55,18 @@
   </Program_Info>
   <Program_Descriptions>
     <English>
-      <Keywords>short video maker, vertical video, tiktok, youtube shorts, reels, text to speech, captions, subtitles, offline, free, windows</Keywords>
-      <Char_Desc_45>Turn an article into a narrated short, free</Char_Desc_45>
-      <Char_Desc_80>Turns a guide, feed or topic into a narrated, captioned vertical short</Char_Desc_80>
-      <Char_Desc_250>ShortGeek turns one of your articles, any RSS feed or URL, or a bare topic into a narrated, captioned 1080x1920 short. Script, voice, captions and visuals are all produced on your own machine. No account and nothing uploaded.</Char_Desc_250>
-      <Char_Desc_450>ShortGeek turns an article, an RSS feed, a URL or a topic into a finished vertical short: written, narrated, captioned and rendered on your own machine. It drafts a script with no API key, speaks it with a free neural voice or an offline fallback, burns in word-level captions, and builds visuals from the article's own images or animated backgrounds. Out comes a 1080x1920 MP4 for TikTok, Reels and Shorts. No account, no upload, no watermark.</Char_Desc_450>
-      <Char_Desc_2000>ShortGeek turns an article into a narrated, captioned vertical short.
+      <Keywords>short video maker, vertical video, tiktok, youtube shorts, reels, text to speech, captions, subtitles, free, windows</Keywords>
+      <Char_Desc_45>Turn a script into a narrated short, free</Char_Desc_45>
+      <Char_Desc_80>Turns a script into a narrated, captioned vertical short on your own PC</Char_Desc_80>
+      <Char_Desc_250>ShortGeek turns a script you write or paste in into a narrated, captioned 1080x1920 short, rendered on your own machine. Attach a screenshot to any beat. No account, no watermark, no export limit.</Char_Desc_250>
+      <Char_Desc_450>ShortGeek turns a script you write or paste in into a finished vertical short: narrated, captioned and rendered on your own machine. It speaks the script with a free neural voice or an offline voice, burns in word-level captions, and builds visuals from code-drawn backgrounds, your own clips, or a screenshot on any beat. Out comes a 1080x1920 MP4 for TikTok, Reels and Shorts. No account, no upload, no watermark.</Char_Desc_450>
+      <Char_Desc_2000>ShortGeek turns a script into a narrated, captioned vertical short.
 
-Point it at one of your own WordPress guides, any RSS feed or article URL, a bare topic prompt, or a script you have already written. ShortGeek drafts a script from it, reads it aloud, times captions to the words, builds the visuals and renders a 1080x1920 MP4 ready for TikTok, Instagram Reels and YouTube Shorts.
+Write or paste a script, split into a hook, a few beats and a call to action. ShortGeek reads it aloud, times captions to the words, builds the visuals and renders a 1080x1920 MP4 ready for TikTok, Instagram Reels and YouTube Shorts. Attach a small screenshot to any beat, for example a Windows dialog, and it shows as an inset on that beat's card.
 
-The script writer needs no API key and no account. If you would rather have an AI polish pass, you can supply your own Anthropic or OpenAI key, and if you do not, nothing is sent anywhere.
+Backgrounds are drawn in code or are clips you supply. None of it is AI generated imagery.
 
-Three voices are available: the free Edge neural voice, eSpeak NG as a fully offline fallback, and ElevenLabs if you have a key of your own. Captions come from real word-level timings, not guesswork, and burn in as Bold Highlight, Minimal or Classic Subtitle.
-
-Backgrounds can be the article's own screenshots panned slowly full-bleed, procedural stills, genuinely animated loops rendered frame by frame, or your own video clips. Nothing is AI-generated imagery.
-
-On first run ShortGeek asks for your name, handle and logo letters, because it puts them on the end card of every video. Your videos go out as you.
+The default voice is Microsoft Edge's free neural voice, which sends the narration text to Microsoft's online speech service. You can add your own ElevenLabs key, or use the offline voice, which sends nothing. Full privacy details: https://techygeekshome.info/shortgeek/privacy/
 
 No account, no sign-up, no telemetry, no watermark and no export limit. It never uploads your videos and never posts on your behalf. Python and ffmpeg are inside the installer, so there is nothing to install first.</Char_Desc_2000>
     </English>
