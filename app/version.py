@@ -8,13 +8,19 @@ The app was called Shorts Studio up to 1.12.0 and was never released publicly.
 Version numbering restarts at 1.0.0 for the first public ShortGeek release; the
 older entries are kept below because the fixes in them are real."""
 
-APP_VERSION = "2.0.0"
+APP_VERSION = "2.0.1"
 
 # Shown on the About page. Kept here so there is one place to change it if the
 # licence ever changes.
 APP_LICENCE = "Freeware"
 
 CHANGELOG = [
+    {
+        "version": "2.0.1",
+        "notes": [
+            "The About page now says plainly that the default Edge voice sends your narration text to Microsoft's speech service, and that an ElevenLabs voice sends it to ElevenLabs. It also links to the new privacy page, techygeekshome.info/shortgeek/privacy.",
+        ],
+    },
     {
         "version": "2.0.0",
         "notes": [
