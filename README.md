@@ -110,8 +110,10 @@ Nothing is AI generated and nothing is somebody else's footage passed off as you
   remove. The default voice and every background work with no keys at all.
 - **It does not upload for you.** Direct upload APIs are locked down, quota limited and change
   constantly. You get a finished file and post it yourself.
-- **It does not send your work anywhere.** Everything renders on this machine. The only outbound
-  calls are to the voice service, and to a paid AI provider if you choose to add your own key.
+- **It does not upload your videos or screenshots.** Everything renders on this machine. Your
+  narration text is the exception: the default Edge voice sends it to Microsoft's speech service,
+  or to ElevenLabs if you add your own key and choose that voice. The offline voice sends nothing.
+  Full details are on the [privacy page](https://techygeekshome.info/shortgeek/privacy/).
 
 ---
 
